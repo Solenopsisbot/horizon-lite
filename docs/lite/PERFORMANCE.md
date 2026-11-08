@@ -164,7 +164,9 @@ speed" means here.
 
 - `[profile.lite]`: fat LTO, one codegen unit, `panic=abort`, no debug assertions or overflow
   checks, symbols kept for crash reports. `scripts/build-speed.sh` adds `target-cpu=native` and a
-  PGO pass (`--pgo`) that trains on the title screen and the standard benchmark.
+  PGO pass (`--pgo`) that trains on the title screen and the standard benchmark. Built here in
+  12m08s: **79.7 MB**, against 108 MB for the `fast` profile, and smoke-tested for 40 frames with a
+  cold first frame at 2.2 s.
 - `[profile.lite-pgo]` uses thin LTO for the instrumented build so training does not pay fat-LTO
   time.
 - mimalloc keeps its one-second purge delay (upstream set it to 0, favouring RSS over speed). This

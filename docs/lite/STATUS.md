@@ -11,7 +11,9 @@ Date: 2026-11-08. Fork base: upstream `4e6920a` (2026-11-08).
 | Default build profile | `default = ["audio"]` in `horizon-client` and `horizon-client-lib` | **pass** |
 | Toolchain | `rustc 1.99.1`, `cargo 1.99.1`, Linux x86-64 | — |
 | Speed A/B | `--benchmark standard`, GTX 970 4 GB, 3 runs/side, offscreen | **1.4–2.5× FPS**, see PERFORMANCE.md |
-| CI `verify` (GitHub Actions, `ubuntu-latest`) | format + workspace check + no-default check + `cargo test -p horizon-client --lib` | **pass**, 7m47s at `b84991f` (before the speed pass; rerun pending) |
+| CI `verify` (GitHub Actions, `ubuntu-latest`) | format + workspace check + no-default check + `cargo test -p horizon-client --lib` | **pass** at `e5fd938` (speed pass) and `b84991f` (product pass) |
+| `scripts/build-speed.sh` (`--profile lite`) | fat LTO + one codegen unit + `target-cpu=native` | **pass**, 12m08s, 79.7 MB binary |
+| Lite binary smoke test | 40 frames, `--test-terrain`, Xvfb, fresh game dir | **pass**, world loaded, exit 0, first frame 2.2 s cold |
 
 The local machine was simultaneously building another checkout, so a full
 `cargo build --profile fast` was OOM-killed twice there. GitHub's runner compiled and linked the
