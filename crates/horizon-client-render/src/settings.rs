@@ -219,8 +219,9 @@ impl Default for Settings {
     fn default() -> Self {
         Self {
             fov: 70.0,
-            render_distance: 12,
-            simulation_distance: 12,
+            // Lite's speed defaults: fewer columns to mesh, stream and tick.
+            render_distance: 8,
+            simulation_distance: 6,
             sensitivity: 0.5,
             master_volume: 1.0,
             volumes: [1.0; 11],
@@ -228,30 +229,31 @@ impl Default for Settings {
             gui_scale: 0,
             view_bobbing: true,
             gamma: 0.5,
-            // Vanilla's default, as for an options.txt without the key: a
-            // capped frame rate leaves the cores idle when VSync is off.
-            max_fps: 120,
-            vsync: true,
+            // Unlimited (this engine treats >= 260 as no cap) and no VSync:
+            // Lite is built for maximum frames, not for a quiet GPU.
+            max_fps: 260,
+            vsync: false,
             fullscreen: false,
             smooth_lighting: true,
-            clouds: "true".into(),
-            cloud_range: 128,
-            particles: 0,
-            entity_distance: 1.0,
-            entity_shadows: true,
-            biome_blend: 2,
-            graphics_preset: "fancy".into(),
+            clouds: "false".into(),
+            // If a player turns clouds back on, keep the cell count sane.
+            cloud_range: 32,
+            particles: 2,
+            entity_distance: 0.5,
+            entity_shadows: false,
+            biome_blend: 0,
+            graphics_preset: "fast".into(),
             mipmap_levels: 4,
-            weather_radius: 10,
-            chunk_fade: 0.75,
-            vignette: true,
+            weather_radius: 3,
+            chunk_fade: 0.0,
+            vignette: false,
             autosave_indicator: true,
-            cutout_leaves: true,
+            cutout_leaves: false,
             improved_transparency: false,
             attack_indicator: 1,
             inactivity_fps_limit: "afk".into(),
             prioritize_chunk_updates: 0,
-            menu_blur: 5,
+            menu_blur: 0,
             invert_y: false,
             mouse_wheel_sensitivity: 1.0,
             discrete_scroll: false,
@@ -1154,7 +1156,7 @@ mod tests {
     #[test]
     fn no_options_txt_paces_frames_like_an_empty_one() {
         let (fresh, empty) = (Settings::default(), Settings::parse(""));
-        assert_eq!(fresh.max_fps, 120);
+        assert_eq!(fresh.max_fps, 260);
         assert_eq!(fresh.max_fps, empty.max_fps);
         assert_eq!(fresh.vsync, empty.vsync);
         assert_eq!(fresh.inactivity_fps_limit, empty.inactivity_fps_limit);

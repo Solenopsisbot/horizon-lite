@@ -361,14 +361,15 @@ pub fn heap_tag(name: &'static str) -> Option<heap_census::Tag> {
 /// don't name it.
 const PURGE_DELAY: libmimalloc_sys::mi_option_t = 15;
 
-/// Set the allocator up, first thing in `main`: free pages go back to the OS
-/// at once instead of a second later. With mimalloc's delay the game held a
-/// quarter more memory than with the system heap; without it a few percent,
-/// and generation keeps most of its speed-up.
+/// Set the allocator up, first thing in `main`. Lite keeps mimalloc's own
+/// one-second purge delay instead of purging on every free: the immediate
+/// purge was a memory optimisation and a speed regression in the chunk churn.
+/// It costs RSS (upstream measured about a quarter more than the system heap,
+/// against a few percent with the delay); this fork buys the frames.
 pub fn configure_allocator() {
     // SAFETY: sets one integer option, which mimalloc reads at each purge.
     unsafe {
-        libmimalloc_sys::mi_option_set(PURGE_DELAY, 0);
+        libmimalloc_sys::mi_option_set(PURGE_DELAY, 1000);
     }
 }
 
@@ -691,16 +692,16 @@ mod tests {
     }
 
     /// The option set is the purge delay: mimalloc v3's default for it is
-    /// 1000 ms, and it is 0 once configured.
+    /// 1000 ms, and Lite keeps it.
     #[test]
-    fn configuring_the_allocator_purges_at_once() {
+    fn configuring_the_allocator_keeps_the_purge_delay() {
         // SAFETY: reads and sets one integer option.
         let get = || unsafe { libmimalloc_sys::mi_option_get(super::PURGE_DELAY) };
         if std::env::var_os("MIMALLOC_PURGE_DELAY").is_none() {
             assert_eq!(get(), 1000);
         }
         super::configure_allocator();
-        assert_eq!(get(), 0);
+        assert_eq!(get(), 1000);
     }
 }
 

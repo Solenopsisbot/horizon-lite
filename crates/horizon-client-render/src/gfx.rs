@@ -153,8 +153,10 @@ fn translucent_split(batching: bool, flat_draws: bool, terrain: bool, shadow: bo
 }
 
 /// The compact layout of solid quads, unless `HORIZON_PACKED_QUADS=0` (A/B checks).
+/// Read once: this is asked on the frame path.
 fn packed_wanted() -> bool {
-    std::env::var("HORIZON_PACKED_QUADS").as_deref() != Ok("0")
+    static WANTED: std::sync::OnceLock<bool> = std::sync::OnceLock::new();
+    *WANTED.get_or_init(|| std::env::var("HORIZON_PACKED_QUADS").as_deref() != Ok("0"))
 }
 
 mod animate;
@@ -873,7 +875,7 @@ const SECTION_COPY_LIMIT: u64 = 64 << 20;
 /// `shrink_translucent` with what it left, and a range more where a call's
 /// first is larger (`move_off_page`): a page empties over a few frames, with
 /// no hitch.
-const COMPACT_BUDGET: u64 = 32 << 20;
+const COMPACT_BUDGET: u64 = 8 << 20;
 /// A large translucent page starts to shrink (`Renderer::shrink_translucent`)
 /// this long after terrain last arrived, and `SHRINK_RETRY` after a try found
 /// no room.
@@ -2381,7 +2383,7 @@ async fn open_backend(
         // Video memory in blocks of 8-64 MiB instead of 128-256 MiB (Vulkan and DirectX 12):
         // with the larger blocks a few small buffers kept whole blocks the arena's pages had
         // left, and over half the video memory reserved was unused (1,344 MiB for 500).
-        memory_hints: wgpu::MemoryHints::MemoryUsage,
+        memory_hints: wgpu::MemoryHints::Performance,
         ..Default::default()
     };
     #[cfg(not(target_os = "macos"))]

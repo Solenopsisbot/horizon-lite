@@ -59,7 +59,10 @@ pub fn faces(mask: u16) -> impl Iterator<Item = (u8, bool)> {
 /// `CloudRenderer.prepare`: the cell radius for the Cloud Distance option
 /// (in chunks), independent of the render distance.
 pub fn radius_cells(cloud_range_chunks: i32) -> i32 {
-    ((cloud_range_chunks * 16) as f32 / 12.0).ceil() as i32
+    // The upstream maximum (128 chunks) heads for ~91k cells; past 32 the
+    // cells are beyond the fog anyway. Lite caps the cost even if a player
+    // turns the Cloud Distance slider back up.
+    ((cloud_range_chunks.clamp(2, 32) * 16) as f32 / 12.0).ceil() as i32
 }
 
 #[derive(Clone)]

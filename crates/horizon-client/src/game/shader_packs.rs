@@ -223,16 +223,23 @@ impl Game<'_> {
             self.all_sections_changed();
         }
         let selected = picked_pack(&self.settings).to_owned();
-        let path = self.native_shaders.resolve_path(
-            &Self::shader_packs_dir(),
-            &selected,
-            dev_pack().is_some(),
-        );
-        let file = path.file_name().unwrap_or_default().to_string_lossy();
-        let picked = if selected.is_empty() || active_pack(&file, &self.settings.mods).is_empty() {
+        // No pack picked is the default build: don't resolve a path (a PathBuf
+        // clone, a file-name allocation and a directory lookup) every frame.
+        let mut path = std::path::PathBuf::new();
+        let picked = if selected.is_empty() {
             String::new()
         } else {
-            path.to_string_lossy().into_owned()
+            path = self.native_shaders.resolve_path(
+                &Self::shader_packs_dir(),
+                &selected,
+                dev_pack().is_some(),
+            );
+            let file = path.file_name().unwrap_or_default().to_string_lossy();
+            if active_pack(&file, &self.settings.mods).is_empty() {
+                String::new()
+            } else {
+                path.to_string_lossy().into_owned()
+            }
         };
         if self.native_shaders.picked != picked {
             self.native_shaders.select(&picked);

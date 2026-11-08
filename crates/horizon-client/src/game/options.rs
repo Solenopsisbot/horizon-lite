@@ -98,8 +98,11 @@ impl Game<'_> {
         horizon_client::logging::player_dir().join("options.txt")
     }
     /// The game folder (the working directory): what its players share, saves, packs, mods.
+    /// Cached: `shader_pack_inputs` asks for it every frame, and `current_dir` is a syscall.
     pub(super) fn game_dir() -> std::path::PathBuf {
-        std::env::current_dir().unwrap_or_default()
+        static DIR: std::sync::OnceLock<std::path::PathBuf> = std::sync::OnceLock::new();
+        DIR.get_or_init(|| std::env::current_dir().unwrap_or_default())
+            .clone()
     }
     /// `shaderpacks/` in the game folder.
     pub(super) fn shader_packs_dir() -> std::path::PathBuf {

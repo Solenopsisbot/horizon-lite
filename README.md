@@ -24,13 +24,17 @@ saves.
 | Telemetry ingest server, signed releases | Yes | Removed |
 | Controllers, DualSense | On by default | Off by default |
 | Horizon Settings, cosmetics, emotes, Discord, heartbeat | On by default | Off by default |
+| Defaults | Vanilla: RD 12, sim 12, fancy clouds, VSync on, 120 FPS cap | **Speed**: RD 8, sim 6, clouds off, particles minimal, VSync off, unlimited FPS |
+| Build | release profile | `[profile.lite]`: fat LTO, one codegen unit, `panic=abort`; `scripts/build-speed.sh` adds native tuning and PGO |
 | Single player, LAN, all dimensions, mobs, redstone, command blocks | Yes | Yes |
 | Resource packs, data packs, OptiFine models | Yes | Yes |
 | Content mods, native Rust mods, shader packs | Yes | Present and unchanged in v0.1; removal is planned, see [`docs/lite/PLAN.md`](docs/lite/PLAN.md) |
 
-The game is still ~1.27M lines of Rust. **Lite means fewer surfaces and a smaller build graph, not
-a smaller Minecraft.** The full audit — what is cuttable, what is load-bearing, and why deleting
-the network layer would break single player — is in [`docs/lite/PLAN.md`](docs/lite/PLAN.md).
+The game is still ~1.27M lines of Rust. **Lite means fewer surfaces, a smaller build graph, and
+speed — not a smaller Minecraft.** Two documents cover the work: [`docs/lite/PLAN.md`](docs/lite/PLAN.md)
+is the product teardown (what is cuttable and why deleting the network layer would break single
+player), and [`docs/lite/PERFORMANCE.md`](docs/lite/PERFORMANCE.md) is the measured speed audit
+(defaults, frame path, build flags, and what does *not* buy FPS).
 
 ## Build
 
@@ -38,7 +42,12 @@ Requirements: Rust 1.95+, JDK 25, Python 3.10+ (only for the prepare script), an
 `libasound2-dev` + `libudev-dev`.
 
 ```sh
+# fast to build, normal speed
 cargo build --release -p horizon-client -p horizon-prepare
+
+# the speed build: fat LTO, native tuning, optional profile-guided optimisation
+scripts/build-speed.sh          # -> target/lite/horizon-client
+scripts/build-speed.sh --pgo    # train on the real benchmark first (5-15%)
 ```
 
 ### Prepare the game files (once per Minecraft version)

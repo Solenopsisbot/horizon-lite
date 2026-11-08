@@ -7,6 +7,8 @@ describes code that is still here.
 
 - [`lite/PLAN.md`](lite/PLAN.md) — what Horizon Lite is, what was removed, what is still cuttable,
   and the traps.
+- [`lite/PERFORMANCE.md`](lite/PERFORMANCE.md) — the speed audit: what costs frame time, the speed
+  defaults, the `lite` build profile and PGO.
 - [`lite/STATUS.md`](lite/STATUS.md) — verified build state and known gaps.
 - [`lite/reports/`](lite/reports/) — nine read-only subsystem audits of upstream `4e6920a`.
 - [`architecture.md`](architecture.md) — feature → files → checks for the game loop and each

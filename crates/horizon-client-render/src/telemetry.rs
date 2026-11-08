@@ -548,7 +548,7 @@ mod tests {
         assert_eq!(perf.seconds, 66);
         assert_eq!(perf.frames.count, 4000);
         assert_eq!(perf.ticks.as_ref().unwrap().p50_ms, 4.0);
-        assert_eq!(perf.settings.render_distance, 12);
+        assert_eq!(perf.settings.render_distance, 8);
         assert!(perf.to_world_ms.is_some());
         assert!(serde_json::to_vec(&pending[0].1).unwrap().len() < 1024);
     }

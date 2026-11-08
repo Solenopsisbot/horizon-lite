@@ -100,3 +100,34 @@ inherits = "release"
 lto = false
 codegen-units = 16
 incremental = true
+
+# The speed build: everything the linker can do for one single-player binary.
+# Fat LTO across the whole crate graph, one codegen unit, no debug assertions,
+# no overflow checks, and no unwind tables. panic=abort means a panic in a
+# worker thread exits the process instead of being caught and dropped by the
+# job pool: fine for a desktop single-player build, wrong for a server.
+# `scripts/build-speed.sh` adds target-cpu=native and offers a PGO pass; see
+# docs/lite/PERFORMANCE.md.
+[profile.lite]
+inherits = "release"
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+debug = 0
+debug-assertions = false
+overflow-checks = false
+incremental = false
+strip = "none"
+
+[profile.lite.package.horizon-mod-api-gen]
+opt-level = 3
+[profile.lite.package.syn]
+opt-level = 3
+[profile.lite.package.proc-macro2]
+opt-level = 3
+
+# The instrumented pass of a profile-guided build: thin LTO is enough there,
+# and fat LTO would only make the training build slow.
+[profile.lite-pgo]
+inherits = "lite"
+lto = "thin"

@@ -12,14 +12,10 @@
 
 /// `blur.json`: the passes' directions, ping-ponging between the copied
 /// frame and a swap texture; the last one writes the frame.
-const PASSES: [[f32; 2]; 6] = [
-    [1.0, 0.0],
-    [0.0, 1.0],
-    [1.0, 0.0],
-    [0.0, 1.0],
-    [1.0, 0.0],
-    [0.0, 1.0],
-];
+// Lite: one separable pass instead of three. Menus default to no blur at all;
+// this only matters for a player who turns it back on, and six full-screen
+// passes at 1440x900 were 250 ms of CPU per frame upstream.
+const PASSES: [[f32; 2]; 2] = [[1.0, 0.0], [0.0, 1.0]];
 
 #[repr(C)]
 #[derive(Clone, Copy, bytemuck::Pod, bytemuck::Zeroable)]

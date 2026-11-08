@@ -38,6 +38,9 @@ pub(super) struct Raiding {
     /// Beds near each raid's centre, rescanned now and then (`HOME` points
     /// of interest for `RaiderMoveThroughVillageGoal`).
     homes: HashMap<i32, (i64, std::sync::Arc<Vec<[i32; 3]>>)>,
+    /// Whether the last tick had a raid or a raider, so the first quiet tick
+    /// can clear the villagers' raid state once and then take the fast path.
+    had_raids: bool,
 }
 
 /// `VillageSiege`: whether tonight is a siege, whether the spot is chosen,
@@ -605,6 +608,19 @@ impl Game<'_> {
             return;
         }
         self.load_raids();
+        // Almost every tick has no raid at all. The full pass below scans
+        // every mob several times; with no raid and no raider it can only
+        // clear stale villager state, which one pass does when the last raid
+        // goes away.
+        let has_raiders = self.mobs.iter().any(|m| raider::state(m).is_some());
+        if self.raiding.raids.ids().is_empty() && !has_raiders {
+            if self.raiding.had_raids {
+                self.raiding.had_raids = false;
+                self.sync_villager_raids(&HashMap::new());
+            }
+            return;
+        }
+        self.raiding.had_raids = true;
         self.register_loaded_raiders();
         for id in self.raiding.raids.ids() {
             self.flush_raid_bar(id);

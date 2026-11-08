@@ -134,6 +134,11 @@ LOC and risk from the audits. "Hours" is a clean removal with compile fixes and 
 a rewrite. The first block is the recommended v0.2. The machine-readable version of this table is
 [`CUTS.tsv`](CUTS.tsv).
 
+**This table is not an FPS plan.** Performance was audited separately
+([`PERFORMANCE.md`](PERFORMANCE.md)): almost every feature below is off or idle by default, so
+deleting it buys build time, binary size and crash surface, not frame time. The measured frame-time
+wins are the speed defaults and the build/allocator changes in that document.
+
 ### v0.2 — low risk, ~40 h
 
 | # | Cut | LOC | Risk | Notes |

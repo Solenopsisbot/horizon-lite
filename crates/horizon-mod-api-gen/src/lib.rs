@@ -984,8 +984,12 @@ fn sources(root: &Path, fill: FillMode) -> Result<Sources, String> {
                 "{build} for {mod_item} in {each} {{ {mod_item}.{name}({invoke}); }} {write_back}"
             ),
         };
+        // The empty list is the normal case: no mod is installed in a Lite
+        // build, and this guard keeps every hook at one slice-length load
+        // instead of building the event struct and walking an empty loop.
+        // An empty list cannot change the output, so this is equivalent.
         dispatch.push_str(&format!(
-            "pub fn dispatch_{name}({dispatch_params}) {{ {body} }}\n"
+            "pub fn dispatch_{name}({dispatch_params}) {{ if {mod_list}.is_empty() {{ return; }} {body} }}\n"
         ));
     }
     if hooks.is_empty() {
