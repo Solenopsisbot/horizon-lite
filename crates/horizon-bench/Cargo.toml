@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 rust-version.workspace = true
 license = "MIT"
-description = "The benchmark report format (docs/benchmark-report.md), shared by the game, the launcher and the upload"
+description = "The benchmark report format, shared by the game, the launcher and the upload"
 
 [dependencies]
 serde = { version = "1", features = ["derive"] }
