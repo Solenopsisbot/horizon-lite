@@ -15,6 +15,19 @@ Horizon at commit `4e6920a`. They are the evidence behind [`../PLAN.md`](../PLAN
 | [`infra.md`](infra.md) | Launcher, tools, tests, CI, docs | Why the launcher is unnecessary, build inputs hidden in `tools/` and `mods/`, CI replacement |
 | [`product.md`](product.md) | Product tiers, invariants, branding | Tier A/B/C comparison, licensing and maintenance strategy, risk register |
 
+### Performance round (2026-11-08, GTX 970 / Ryzen 3700X)
+
+| Report | Scope | Headline |
+|---|---|---|
+| [`perf-frame.md`](perf-frame.md) | Per-frame hot path | Optional features are idle-gated; the real costs are the HUD rebuild, per-text allocations and always-on instrumentation |
+| [`perf-render.md`](perf-render.md) | Renderer, defaults, GPU | Defaults were the problem (RD 12, clouds at 128 chunks, VSync/120 cap); deletion buys ~0 FPS because features are off by default |
+| [`perf-tick.md`](perf-tick.md) | Tick/TPS, chunk pipeline | Mob AI dominates; raids/patrol/sculk scan every mob while idle; simulation distance is the cleanest TPS scaler |
+| [`perf-memory.md`](perf-memory.md) | RSS and VRAM | Chunk encoder wire cache (60–190 MB), startup tables (120–220 MB), GUI atlas (84 MB VRAM) |
+| [`perf-build.md`](perf-build.md) | Build flags, allocator, startup | PGO 5–15%, native 2–8%, fat LTO 1–4%, mimalloc purge 1–5%, pipeline-cache startup win |
+| [`perf-optional.md`](perf-optional.md) | Cross-cutting feature costs | The cost model is upside down: all the features you would delete are runtime-inert; the mod API is the exception |
+| [`perf-modapi.md`](perf-modapi.md) | Native mod dispatch | 507 hooks, 655 call sites; zero-mod cost 0.1–0.5% CPU; one generator guard removes it |
+| [`perf-measure.md`](perf-measure.md) | Benchmark protocol | How to run `--benchmark`, pitfalls (Xvfb, offscreen, VRAM, contention), comparison template |
+
 ## Caveats
 
 - These describe **upstream**, not this fork. Some numbers have already changed here: the launcher,

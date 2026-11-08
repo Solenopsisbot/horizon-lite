@@ -10,7 +10,8 @@ Date: 2026-11-08. Fork base: upstream `4e6920a` (2026-11-08).
 | Headless/server profile | `cargo check -p horizon-client --no-default-features` | **pass** |
 | Default build profile | `default = ["audio"]` in `horizon-client` and `horizon-client-lib` | **pass** |
 | Toolchain | `rustc 1.99.1`, `cargo 1.99.1`, Linux x86-64 | — |
-| CI `verify` (GitHub Actions, `ubuntu-latest`) | format + workspace check + no-default check + `cargo test -p horizon-client --lib` | **pass**, 7m47s at `b84991f` |
+| Speed A/B | `--benchmark standard`, GTX 970 4 GB, 3 runs/side, offscreen | **1.4–2.5× FPS**, see PERFORMANCE.md |
+| CI `verify` (GitHub Actions, `ubuntu-latest`) | format + workspace check + no-default check + `cargo test -p horizon-client --lib` | **pass**, 7m47s at `b84991f` (before the speed pass; rerun pending) |
 
 The local machine was simultaneously building another checkout, so a full
 `cargo build --profile fast` was OOM-killed twice there. GitHub's runner compiled and linked the
@@ -32,6 +33,29 @@ runtime smoke test are still unverified — see below.
 
 If you are the first to run this: build with `cargo build --profile fast -p horizon-client`, run
 `horizon-prepare` once, then `./play.sh TestWorld` and report what the log says.
+
+## Speed pass (2026-11-08)
+
+A second, performance-focused pass followed the product cuts. The measured A/B (3 runs per side,
+GTX 970 at 720p offscreen, standard benchmark, fresh game folder so each binary's own defaults
+apply) is in [`PERFORMANCE.md`](PERFORMANCE.md#a-b-result-the-speed-defaults):
+
+| | Before | After |
+|---|---:|---:|
+| Forest / mountain average FPS | 784 / 977 | 1,932 / 1,975 |
+| 1%-low FPS (forest / mountain) | 270 / 274 | 548 / 534 |
+| 0.1%-low FPS (forest / mountain) | 126 / 145 | 227 / 246 |
+| World load / mountain chunk load | 3,574 / 4,061 ms | 2,728 / 1,956 ms |
+| GPU memory | 405 MB | 265 MB |
+| RSS steady | 1,267 MB | 1,575 MB |
+
+The frame rate roughly doubles in terrain-heavy scenes and hitches improve 1.5–1.8×. The cost is
+RSS (mimalloc purge delay) and a visible quality change (RD 8, solid leaves, clouds off, minimal
+particles). Both are settings, not locks.
+
+The speed pass also added `[profile.lite]` (fat LTO, one codegen unit, `panic=abort`),
+`scripts/build-speed.sh` (`target-cpu=native` and an optional PGO pass), the empty-mod-list
+early-out in all 507 generated dispatch hooks, and small hot-path caches.
 
 ## What changed
 

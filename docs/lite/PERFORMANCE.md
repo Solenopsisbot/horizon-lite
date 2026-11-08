@@ -49,6 +49,59 @@ numbers as a floor, not a hero figure.
 The benchmark forces VSync off and an unlimited rate, so it **cannot** show the win from removing
 the VSync/120-FPS caps; that part is measured by playing, not by this harness.
 
+## A/B result: the speed defaults
+
+Two `fast`-profile binaries, same machine, same driver, same prepared resources, 1280×720
+offscreen, standard 4-scene benchmark, 3 runs each, alternating A/B. A is the binary before this
+change (vanilla defaults: RD 12, sim 12, fancy clouds, all particles, VSync on). B is this fork
+(RD 8, sim 6, clouds off, minimal particles, solid leaves, async culling, plus the code changes
+below). Each run used a brand-new game folder with **no `options.txt`**, so each binary's own
+defaults applied. Medians of 3 runs (one A run hit a load spike; medians are used so it cannot drag
+the result):
+
+| Metric | A (before) | B (after) | B/A |
+|---|---:|---:|---:|
+| Village avg FPS | 1,173 | 2,106 | **1.80×** |
+| Forest avg FPS | 784 | 1,932 | **2.47×** |
+| Ocean avg FPS | 952 | 1,334 | **1.40×** |
+| Mountain avg FPS | 977 | 1,975 | **2.02×** |
+| Village 1%-low | 349 | 628 | 1.80× |
+| Forest 1%-low | 270 | 548 | 2.03× |
+| Ocean 1%-low | 315 | 546 | 1.73× |
+| Mountain 1%-low | 274 | 534 | 1.95× |
+| Village 0.1%-low | 138 | 239 | 1.73× |
+| Forest 0.1%-low | 126 | 227 | 1.81× |
+| Ocean 0.1%-low | 141 | 213 | 1.52× |
+| Mountain 0.1%-low | 145 | 246 | 1.70× |
+| Startup to title | 1,222 ms | 1,203 ms | 0.98× |
+| World load | 3,574 ms | 2,728 ms | **0.76×** |
+| Chunk load, village | 2,209 ms | 1,233 ms | **0.56×** |
+| Chunk load, forest | 2,307 ms | 1,703 ms | 0.74× |
+| Chunk load, ocean | 1,955 ms | 971 ms | **0.50×** |
+| Chunk load, mountain | 4,061 ms | 1,956 ms | **0.48×** |
+| GPU memory | 405 MB | 265 MB | **0.65×** |
+| RSS steady | 1,267 MB | 1,575 MB | 1.24× |
+| RSS peak | 1,493 MB | 1,733 MB | 1.16× |
+
+The frame rate more than doubles in forest and mountain, the hitches (0.1%-low) improve 1.5–1.8×,
+and chunk-heavy scenes load about twice as fast. GPU memory drops by a third because there are 54%
+fewer columns at RD 8. RSS rises ~24%: that is the deliberate mimalloc trade (its one-second purge
+delay instead of purging on every free) plus a smaller view distance not offsetting the allocator's
+retained pages. If memory matters more than the last few percent, set the purge delay back to 0 in
+`crates/horizon-threads/src/lib.rs`.
+
+What this A/B does **not** isolate: the benchmark forces VSync off and an unlimited rate, so the
+removal of the 60/120 FPS caps is invisible here — on a real display that is an additional,
+sometimes large, win. It also does not separate the defaults from the code changes (mod-dispatch
+guard, caches, raid early-out): a code-only run with both binaries on the same frozen
+`options.txt` was not completed, because the default change accounts for nearly all of the delta.
+The mod-API guard's own estimate is 0.1–0.5% CPU; the caches are microseconds per frame.
+
+Caveats: 3 runs per side, offscreen frames (no swapchain present), load average ~10 from other
+builds on the machine, 2 GB of the 4 GB VRAM held by other processes, and startup-to-title was
+measured with a warm driver shader cache in both sides (hence equal, and lower than the cold 3.2 s
+in the baseline table above).
+
 ## What actually costs frame time
 
 From [`reports/perf-render.md`](reports/perf-render.md), [`reports/perf-frame.md`](reports/perf-frame.md)
