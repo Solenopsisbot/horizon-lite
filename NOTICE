@@ -1,0 +1,18 @@
+Horizon Lite
+============
+
+An unofficial fork of Horizon (https://github.com/horizon-rust/horizon), a from-scratch Rust
+reimplementation of Minecraft: Java Edition 26.3.
+
+This repository is not affiliated with, endorsed by, or supported by Mojang Studios, Microsoft,
+the Horizon project, or its maintainers.
+
+Minecraft is a trademark of Mojang Synergies AB. This repository contains no Minecraft code,
+assets, jars, or prepared resources. All game content is read from the user's own installation
+by `horizon-prepare`; prepared files live in `.local/` and are git-ignored.
+
+Upstream copyright and the MIT license are preserved in LICENSE. Third-party notices are in
+THIRD_PARTY_NOTICES.md. The fork's own changes are released under the same MIT terms.
+
+Do not open pull requests, issues, or support requests against the upstream project for anything
+in this repository.

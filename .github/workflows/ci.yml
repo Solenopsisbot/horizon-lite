@@ -1,0 +1,75 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  CARGO_TERM_COLOR: always
+  CARGO_BUILD_JOBS: 4
+
+jobs:
+  verify:
+    name: verify (linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System libraries
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
+
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: verify
+
+      - name: Format
+        run: cargo fmt --all -- --check
+
+      - name: Check the workspace (all targets)
+        run: cargo check --workspace --all-targets
+
+      - name: Check without default features
+        run: cargo check -p horizon-client --no-default-features
+
+      - name: Client library tests
+        run: cargo test -p horizon-client --lib
+
+  build:
+    name: build (linux)
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    needs: verify
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: System libraries
+        run: sudo apt-get update && sudo apt-get install -y libasound2-dev libudev-dev
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          shared-key: build
+
+      - name: Build the game and the preparer
+        run: cargo build --release -p horizon-client -p horizon-prepare
+
+      - name: Package the game folder
+        run: cargo run --release -p xtask -- package target/release/horizon-client dist/horizon-lite
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: horizon-lite-linux-x86_64
+          path: dist/
+          if-no-files-found: error
