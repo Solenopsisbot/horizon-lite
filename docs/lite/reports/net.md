@@ -1,6 +1,6 @@
 # Horizon Lite — networking, multiplayer, servers
 
-**Source:** `/home/solenopsisbot/coding/mc/horizon-src` @ 2026-11-08 (read-only; no cargo builds run).
+**Source:** `upstream` @ 2026-11-08 (read-only; no cargo builds run).
 **Scope:** `horizon-protocol`, `horizon-client` net/remote/LAN/integrated/dedicated/friends, `horizon-server*`, `horizon-anticheat`, `horizon-chat-filter`, `horizon-bots`, `horizon-mcp`, `horizon-friends`, `horizon-relay`, control/agent.
 **Method:** `wc -l` over source (tests included unless stated), `rg` dependency and call-site counts, line-level reading. LOC are exact file totals; "prod" = file minus its `#[cfg(test)]` module.
 

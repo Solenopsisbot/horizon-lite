@@ -1,6 +1,6 @@
 # Horizon Lite — gameplay slice audit (`horizon-client/src/game.rs` + `game/`)
 
-Read-only audit of `/home/solenopsisbot/coding/mc/horizon-src`. Numbers from `wc -l` and a
+Read-only audit of `upstream`. Numbers from `wc -l` and a
 per-file parse of `impl Game` methods, cross-referenced against call sites in `game.rs`.
 
 **LOC correction up front:** the brief says 650k LOC / 936 files for this slice. Actual:

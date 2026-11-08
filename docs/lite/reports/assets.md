@@ -1,6 +1,6 @@
 # Horizon Lite — assets, packs, shaders, mods, item/block data
 
-Read-only survey of `/home/solenopsisbot/coding/mc/horizon-src` (1,443,639 Rust LOC in
+Read-only survey of `upstream` (1,443,639 Rust LOC in
 `crates/` + `launcher/` + `xtask/`). Line counts are `wc -l` over `.rs` (comments and
 `#[cfg(test)]` included unless stated). Nothing was built; numbers that need a build come from
 the checked-in `target/debug/build/*/out` artefacts.

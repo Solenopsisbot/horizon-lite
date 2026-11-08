@@ -1,6 +1,6 @@
 # Horizon → Horizon Lite: cargo features, cfg gating, and a measured deletion plan
 
-Scope: `/home/solenopsisbot/coding/mc/horizon-src` @ working tree (Minecraft Java 26.3 port).
+Scope: `upstream` @ working tree (Minecraft Java 26.3 port).
 Read-only analysis. No files in `horizon-src` were modified. No `cargo build` was run; `cargo tree
 --offline` (manifest-only) was used for dependency measurements, `wc`/`grep`/Python for source.
 

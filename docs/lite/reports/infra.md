@@ -1,6 +1,6 @@
 # Horizon Lite — infrastructure slice
 
-Scope: everything in `/home/solenopsisbot/coding/mc/horizon-src` that is **not the game binary**.
+Scope: everything in `upstream` that is **not the game binary**.
 All numbers measured on the read-only checkout (no cargo run). `git log` = 22,320 commits,
 `.git` = 235 MB, working tree = 139 MB excluding `.git`/`target`.
 

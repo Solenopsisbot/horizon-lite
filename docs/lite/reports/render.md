@@ -1,6 +1,6 @@
 # Horizon Lite — Rendering & Graphics slice
 
-**Source:** `/home/solenopsisbot/coding/mc/horizon-src` (read-only)
+**Source:** `upstream` (read-only)
 **Scope:** `crates/horizon-client-render/` (223,162 LOC / 277 `.rs` + 6,201 LOC / 33 `.wgsl`) plus graphics glue in `crates/horizon-client/src` (`game/render_tick.rs`, `game/screen_backgrounds.rs`, `item_render.rs`, `first_person.rs`, `game/native_*_draw.rs`, `game/occlusion_culling.rs`, `game/particle_culling.rs`, `game/shader_packs.rs`, `game/native_shaders.rs`, `game.rs::render_frame`) and the graphics crates `horizon-shaders`, `horizon-optifine`, `horizon-shader-api`, `horizon-hdr`.
 **Whole workspace:** 1,328,595 LOC of `.rs`. This slice is therefore **~21%** of the tree — ≈280k LOC counting `.wgsl`, client glue and the four graphics crates.
 
