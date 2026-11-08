@@ -10,15 +10,21 @@ Date: 2026-11-08. Fork base: upstream `4e6920a` (2026-11-08).
 | Headless/server profile | `cargo check -p horizon-client --no-default-features` | **pass** |
 | Default build profile | `default = ["audio"]` in `horizon-client` and `horizon-client-lib` | **pass** |
 | Toolchain | `rustc 1.99.1`, `cargo 1.99.1`, Linux x86-64 | — |
+| CI `verify` (GitHub Actions, `ubuntu-latest`) | format + workspace check + no-default check + `cargo test -p horizon-client --lib` | **pass**, 7m47s at `b84991f` |
 
-The checks were run on a machine that was simultaneously building another checkout, so a full
-`cargo build --profile fast` was OOM-killed twice. Compilation is verified; linking and a runtime
-smoke test are not. See "Not yet verified" below.
+The local machine was simultaneously building another checkout, so a full
+`cargo build --profile fast` was OOM-killed twice there. GitHub's runner compiled and linked the
+library test target and ran 1,144 tests (1,143 passed, 212 ignored for missing prepared
+resources, 1 failed only on the previous run and removed). The gameplay executable's link and a
+runtime smoke test are still unverified — see below.
 
 ## Not yet verified
 
 - **Runtime smoke test.** Needs `.local/horizon-client/26.3` produced by `horizon-prepare` from a
   real Minecraft 26.3 install plus JDK 25. Not available in the build environment used for v0.1.
+- **The `horizon-client` executable's link.** CI checks all targets and links the library test
+  target, but does not link the release executable (the release build job was removed: public
+  runners are not upstream's self-hosted release pool).
 - **Visual check.** No GPU/window session; the title screen layout changes (Realms removed,
   Options/Quit moved up one row) have not been seen on screen.
 - **Save round-trip.** Unchanged code, but not exercised here.
