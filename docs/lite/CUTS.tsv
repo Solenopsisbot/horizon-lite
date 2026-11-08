@@ -1,0 +1,36 @@
+priority	subsystem	files_or_crates	loc	risk	hours	status	notes
+done	launcher	launcher/	114508	low	0	removed	Upstream release endpoints and signing keys; no-launcher path already exists
+done	dedicated supervisor	crates/horizon-server	19769	low	0	removed	Game-level dedicated code remains (see p2-dedicated)
+done	modpack porting	crates/horizon-port-pack	15899	low	0	removed	Launcher/CLI only
+done	telemetry ingest server	crates/horizon-telemetry-server	5834	low	0	removed	Separate workspace
+done	mod registry	crates/horizon-mod-registry	3602	low	0	removed	Hosted index service
+done	Play with Friends relay	crates/horizon-relay	2377	low	0	removed	Client feature is off by default
+done	dead polytone crate	crates/horizon-polytone	1817	low	0	removed	Zero consumers anywhere
+done	load-test bots	crates/horizon-bots	1784	low	0	removed	Server testing
+done	release signing	crates/horizon-release-sign	1582	low	0	removed	Upstream trust roots
+done	mod CLI	crates/cargo-horizon-mod	840	low	0	removed	Mod-authoring tool
+done	mod deps	crates/horizon-mod-deps	2	low	0	removed	Empty lockfile-anchor crate
+done	Realms	realms.rs + realms/	8609	low	0	removed	Paid Microsoft service, online account
+done	tools and parity harnesses	tools/ (1101 files)	144690	low	0	removed	Kept tools/native-hook-fragments (build input) and check_public_tree.py
+done	python test infra	tests/	13441	low	0	removed	Kept tests/fixtures (include_str! inputs)
+done	docs media and product docs	docs/	27831	low	0	removed	Kept technical docs that describe kept code
+done	benchmarks and roadmap	benchmarks/ roadmap/ ROADMAP.md	0	low	0	removed	17 MB of historical results and marketing state
+p2	agent/dev tooling and harnesses	agent.rs control.rs repro.rs *_fixture.rs input_trace.rs net_harness.rs tick_script.rs	9188	low	12	gated	Gate gameplay-interposed fixtures behind dev-harness; agent.rs has no call sites
+p2	multiplayer-only UI	dialogs code_of_conduct links social friends screens	5292	low	10	planned	Inert in SP; Screen enum has ~840 refs across 91 files
+p2	in-game dedicated code	game/dedicated.rs game/dedicated/	5088	low	8	planned	Keep horizon-server-files (control/tempban/chat_filter/profiles)
+p2	cosmetics and emotes	horizon-cosmetics game/cosmetics.rs game/emotes.rs game/emote_wheel.rs	7440	low	10	planned	13 render files touched; horizon-extras has only 4 cfg sites
+p2	extras UI and PvP HUD	render/extras.rs extras_ui.rs minimap.rs pvp.rs pvp_hud.rs	6800	low	12	planned	Restore vanilla Video page as part of it
+p2	Studio and replay	game/studio.rs src/studio/ studio_ui	3931	low	6	planned	Recorder/playback of mcpr archives
+p2	shader packs	horizon-shaders horizon-shader-api gfx/pack_*	29649	low-med	16	planned	Keep post_chain/post_glsl (vanilla effects); drop third_party/naga + its patch
+p2	GameTest and master blocks	game_test master_blocks structure/jigsaw/test blocks	5713	low-med	20	planned	tick_game_tests runs unconditionally in the shipping tick
+p2	debug world and tutorial	debugworld.rs tutorial	695	low	4	planned	F3 debug stays
+p3	native mod API	horizon-mod-api-gen native_hooks.rs mod_api.rs build.rs	47441	med	50	planned	432 dispatch sites; use_hand can be cancelled by a hook; biggest build-time lever
+p3	content mods	horizon-mods mod_content.rs mod_registry.rs game/mods.rs	18524	med	30	planned	Interposed on startup, packs and creative tabs
+p3	commands and functions	game/commands/ functions.rs command_blocks.rs horizon-command	33922	med	38	planned	Redefines the game; chat/, signs/, lan/commands all share the registry
+p3	advancements stats scoreboard	advancements.rs stats.rs scoreboard*	6574	med	25	planned	persist.rs reads scoreboard for team membership
+p3	controllers and splitscreen	horizon-client-input gamepad pad*.rs split/ dualsense	18500	low-med	18	planned	Splitscreen owns App::Ready; ~90 call sites
+p4	in-frame single player	remote.rs lan*.rs integrated.rs src/lan/	74000	high	300	parked	Only way to make no-network literal; test harnesses assume server thread
+p4	Nether and End	game/end.rs dragon.rs levels.rs worldgen	2700	high	40	parked	levels.rs parks 48 fields per dimension
+p4	redstone	world/level/redstone.rs	1800	med	20	parked	Bad trade: cheap LOC, visible vanilla behaviour
+p4	datafixer (old versions)	horizon-world/datafix/	21365	med	30	parked	Keep datafix::files and datafix::dynamic (~1200 lines, current loads)
+p4	structures and worldgen features	worldgen/structure/ feature_graph	34285	med	60	parked	without_structures flag exists; client stores StructureStart; saplings need live features

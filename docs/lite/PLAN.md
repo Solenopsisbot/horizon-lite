@@ -20,8 +20,8 @@ estimated.
 | Rust, total (with `third_party/`) | 1,618,600 | 1,441,637 | −176,963 |
 | Python (dev tooling) | 158,163 | 78 | −158,085 |
 | Java (resource-prepare exporters) | 52,657 | 51,267 | −1,390 |
-| Markdown | 40,027 | 12,196 | −27,831 |
-| Workspace crates | 41 | 30 | −11 |
+| Markdown | 40,027 | 12,041 | −27,986 |
+| Workspace crates | 40 | 30 | **−10** |
 | Crates in `horizon-client`'s normal graph | 280 | 255 | −25 |
 | Working tree (no `.git`, no `target/`) | 139 MB | 76 MB | −63 MB |
 
@@ -131,7 +131,8 @@ profile (`--no-network`) once the in-frame port is funded. Tier C is parked.
 ## 4. What is still cuttable, ranked
 
 LOC and risk from the audits. "Hours" is a clean removal with compile fixes and a test pass, not
-a rewrite. The first block is the recommended v0.2.
+a rewrite. The first block is the recommended v0.2. The machine-readable version of this table is
+[`CUTS.tsv`](CUTS.tsv).
 
 ### v0.2 — low risk, ~40 h
 
