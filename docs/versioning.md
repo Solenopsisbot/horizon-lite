@@ -1,13 +1,13 @@
 # Versioning
 
 How Horizon's releases are numbered from 0.2 on, how that maps onto the release workflows, and how every install
-made before 0.2 gets there. The workflows themselves are in [release-flow.md](release-flow.md).
+made before 0.2 gets there. The workflows themselves are in release-flow.md.
 
 Until 0.2 the game was tagged by date (`v2026.10.19.15`) and the launcher counted on its own (`launcher-v0.16.0`).
 From 0.2 both follow [semantic versioning](https://semver.org) and share one release line: **Horizon 0.2.x** is the
 game and the launcher of the 0.2 line.
 
-**Since 2026-10-28 the game ships only Nightlies** ([release-flow.md](release-flow.md#nightly-only)): no new `vX.Y.Z`
+**Since 2026-10-28 the game ships only Nightlies** (release-flow.md): no new `vX.Y.Z`
 game tag is made, and a game build is named `nightly-<date>-<commit>` (its release title, "Nightly <date> ·
 <commit>"), which launchers and servers rank after every `vX.Y.Z`. The launcher keeps its `launcher@X.Y.Z` tags on
 the release line. What follows describes the `vX.Y.Z` game tags as they were.
@@ -29,7 +29,7 @@ the release line. What follows describes the `vX.Y.Z` game tags as they were.
   and launcher counted separately (the game releases more often, so `v0.2.14` can go with `launcher@0.2.3`).
 - **One channel** (since 2026-10-23): every game release is published under its final tag as the release and
   GitHub's latest, once its smoke test passed and no `release-blocker` is open
-  ([One channel](release-flow.md#one-channel)). The game pre-releases from before (v0.2.1 on, the old Alpha
+  (One channel). The game pre-releases from before (v0.2.1 on, the old Alpha
   channel) keep their tags and stay pre-releases.
 - **Pre-release tags** (`v0.3.0-rc.1`, `v0.3.0-beta.2`) are semver's and are reserved for a hand-made preview of a
   new line; the train never makes them. Every reader orders them before their release and after the release
@@ -102,7 +102,7 @@ the fleet's `release-kick` and the orchestrator's heartbeat prompts.
 ## The day Ludovic says go
 
 Done on 2026-10-22; kept as the record of how 0.2 went out. `promote.yml` and `tools/release_channels.py`, which
-it uses, are gone since the single channel (2026-10-23, [One channel](release-flow.md#one-channel)).
+it uses, are gone since the single channel (2026-10-23, One channel).
 
 Run by the orchestrator, in this order. Until step 3, nothing is published.
 

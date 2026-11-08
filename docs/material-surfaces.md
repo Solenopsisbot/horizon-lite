@@ -23,7 +23,7 @@ Run:
 python3 tools/test_material_surface_parity.py
 ```
 
-The [local report](../benchmarks/rust-material-surface-2026-10-06/scoped-parity.json)
+The local report
 records **122,988 matching output lines per reference JAR**, covering **277 fixtures**
 and **5,263 surface-query positions**. The original Java transport invokes actual
 `MaterialSystem` methods and its real constructor. Comparisons include both random
@@ -53,7 +53,7 @@ The column provider controls out-of-height reads and write clipping; failed call
 retain earlier writes. Each extension call is bounded to 1,048,576 iterations.
 
 Run `python3 tools/test_material_extension_parity.py`. The
-[local extension report](../benchmarks/rust-material-extension-2026-10-06/scoped-parity.json)
+local extension report
 records **233,100 matching lines per JAR** across **410 fixtures** and **3,920
 extension calls**. It compares ordered noise/read/write traces and complete
 columns, including both random modes, all 67 biome climates, actual seeded noises,
@@ -73,7 +73,7 @@ worker returns its density context to the caller on success and typed failure;
 previous writes remain visible after failure.
 
 Run `python3 tools/test_material_stage_parity.py`. The
-[local stage report](../benchmarks/rust-material-stage-2026-10-06/scoped-parity.json)
+local stage report
 records **6,733,382 matching output lines per reference JAR**, covering **79 fixtures**,
 **42 terrain fills**, **42 procedural carving passes**, **106 surface builds** and **21,757,952 block values**. The reference invokes actual
 `MaterialSystem.buildSurface` on vanilla `ProtoChunk` instances. Comparisons include

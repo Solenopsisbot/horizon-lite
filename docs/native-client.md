@@ -1,5 +1,9 @@
 # Horizon native client
 
+> **Fork note.** This page was written for the upstream launcher flow. Horizon Lite has no
+> launcher: prepare once with `horizon-prepare` and run `horizon-client --resources ...`, as the
+> [README](../README.md) says. Launcher-specific sections below are kept as upstream history.
+
 `horizon-client` is the playable Rust client for Minecraft Java Edition 26.3.
 It streams a world around the player on worker threads, renders every vanilla
 block model with smooth lighting and biome tints, and runs the validated player
@@ -8,9 +12,8 @@ hardness/tool rules, collect drops from the block loot tables, place blocks,
 craft in the 2x2 inventory grid or on a crafting table, and save and reload worlds
 in vanilla's Anvil format.
 
-**Status:** playable; players get it through [the launcher](../launcher/README.md). The [Java parity table](../README.md#project-status)
-in the README scores each subsystem against vanilla and lists what is still
-missing; [Rust rewrite status](rust-parity.md) has the details.
+**Status:** playable; players build it from source. The upstream README's parity table scored each subsystem against
+vanilla; it went away with the parity harnesses.
 
 On Windows, the launcher uses a stable executable path for each game home across
 release and native-mod updates. Its private runtime copy lives under the launcher's
@@ -23,7 +26,7 @@ The launcher does not create firewall rules or change network-profile settings.
 On x86-64 musl distributions, download `horizon-linux-musl-x86_64.tar.gz` from the
 [Nightly release](https://github.com/horizon-rust/horizon/releases/tag/nightly), when available. This optional
 build is omitted if its build fails. The launcher does not install or update it. Its desktop gameplay and
-vanilla parity are still unverified; see the [musl build limitations](release-flow.md#builds).
+vanilla parity are still unverified; see the musl build limitations.
 
 You need a working X11 or Wayland desktop, musl, libgcc, ALSA and libudev. For Vulkan, install both the loader
 (`libvulkan.so.1`) and your GPU's driver. On Alpine, the common runtime packages are:
@@ -65,7 +68,7 @@ Use current stable Rust (1.90+) and JDK 25 (Python 3.10+ only for the developmen
 harnesses). A checkout never
 downloads the game: resource preparation imports **your own copy** (the 26.3
 client from your official launcher install, and the 26.3 server jar you
-downloaded yourself; see [Build from source](../README.md#build-from-source)),
+downloaded yourself; see [Build from source](../README.md#build)),
 verifies it against the pinned checksums, runs vanilla's data generator and small
 exporters against those jars, and extracts the jar's assets and data into ignored
 `.local/horizon-client/26.3/`. Sounds (about 380 MB) are copied from your
@@ -97,7 +100,7 @@ until they are prepared again. One preparation at a time writes to a folder: eac
 waits for the first. `--complete` prepares, copies the sounds, and fails unless `--check` would
 then pass: one command for resources with nothing missing. `--progress json` prints one JSON
 object a line instead of plain text (its format is part of the Launch API:
-[docs/api/launch.md](api/launch.md#--progress-json)). Exit codes: 0 done, 1 failed or gaps found,
+docs/api/launch.md). Exit codes: 0 done, 1 failed or gaps found,
 2 a refused command line.
 
 A launcher whose files are laid out its own way names them one by one instead of
@@ -126,7 +129,7 @@ in `horizon-ctl stats` and `bench`. The normal benchmark keeps these CPU-clock r
 query, cache-hit and cull counters remain available without profiling.
 
 Optional Windows allocator build features are documented in
-[Windows allocator experiments](windows-allocators.md).
+Windows allocator experiments.
 
 | Option | Meaning |
 | --- | --- |
@@ -303,7 +306,7 @@ game accepts, test hooks included.
   and slots are `slot-ID`. `click ID [right] [shift]` clicks one as the mouse
   would and `set ID VALUE` moves a slider to 0..1; after a click, the next
   `ui`, `click` or `set` waits for the screen to be redrawn. Design and plans:
-  [agent-control.md](agent-control.md).
+  agent-control.md.
 - **Options:** `options-get [KEY...]` gives every `options.txt` option by its
   vanilla key with its value and what it accepts (`{"type": "int", "min": 30,
   "max": 110, "value": 70}`; enums with `choices`, key bindings as
@@ -413,7 +416,7 @@ the large one; there are no game-mode images yet.
 
 ### Play on another of your machines
 
-Horizon targets desktop Linux, macOS and Windows (see [Windows ARM64](windows-arm64.md)).
+Horizon targets desktop Linux, macOS and Windows (see Windows ARM64).
 To play on another machine without Rust, JDK or prepared resources,
 package a release build where they exist:
 
@@ -464,7 +467,7 @@ cargo run --release -p horizon-prepare
 python3 tools/test_native_scene_collision.py
 ```
 
-The [scene collision comparison](../benchmarks/rust-native-scene-collision-2026-10-07/scoped-parity.json)
+The scene collision comparison
 checks **14,150 movement requests**, each with before/after occupancy queries,
 against both pinned reference JARs. Native code independently builds the nine-
 and twenty-five-chunk scenes and all sixteen gallery placements. Movement
@@ -477,7 +480,7 @@ The movement binding stores a player's position, velocity, pose bounds,
 ground/support state, collision flags, movement history and live registered
 attributes. `MotionWorld` composes the existing air-travel, jumping, collision,
 ground-support, restitution and block-coefficient code over the same scene.
-The [stored-motion comparison](../benchmarks/rust-native-scene-motion-2026-10-07/scoped-parity.json)
+The stored-motion comparison
 checks 42,257 operations across 637 evolving scenarios against actual native
 `Player.travel`, jumping and movement, using real native attributes and chunks.
 It compares every resulting position, velocity and bounding-box component by
@@ -486,7 +489,7 @@ velocity/position synchronization flags.
 
 The dry movement tick additionally binds small-velocity cleanup, float input
 damping, held-jump delay and server frost-modifier removal. The expanded
-[tick comparison](../benchmarks/rust-native-motion-tick-2026-10-07/scoped-parity.json)
+tick comparison
 checks 47,393 operations in 847 scenarios against both pinned JARs, including
 direct calls to the actual `LivingEntity.aiStep` body. It compares lazy attribute
 instance creation, stored base/cache/dirty state, modifier values and permanence,
@@ -496,12 +499,12 @@ The test caught an omission where matching positions concealed a retained
 powder-snow modifier and missing attribute notifications; dry ticks now remove
 that modifier after travel, as vanilla does.
 
-The [walking movement comparison](../benchmarks/rust-native-walking-2026-10-07/scene-motion.json)
+The walking movement comparison
 extends this to 65,893 operations in 947 scenarios, invoking actual
 `Player.aiStep` with empty inventory/equipment and no nearby entities. It checks
 head yaw, jump-trigger countdown and speed refresh after movement. Prepared
 input is supplied at the native virtual input boundary. Separately, the
-[local input comparison](../benchmarks/rust-native-walking-2026-10-07/local-input.json)
+local input comparison
 checks 13,988 cases against actual `KeyboardInput.tick` and
 `LocalPlayer.modifyInput`, covering every key combination, diagonal adjustment,
 item/riding/sneaking speed gates, signed zero and nonfinite values. This verifies
@@ -511,11 +514,11 @@ The full `LocalPlayer` lifecycle remains unfinished.
 The fixed-rate driver limits work per rendered frame while retaining overdue
 ticks. Clock tests cover varied frame schedules and long stalls. The development
 focus pause is explicit; no vanilla pause-menu or multiplayer timing is claimed.
-The [Linux walking smoke check](../benchmarks/rust-native-walking-2026-10-07/interactive-smoke.json)
+The Linux walking smoke check
 enabled F5, landed at ground height 4, walked, jumped, switched modes and exited
 with Ctrl+Q. Ground, moved and airborne screenshots were visually inspected;
 the run recorded 207 movement ticks and finished grounded without an error.
-The [renderer startup check](../benchmarks/rust-native-walking-2026-10-07/startup-smoke.json)
+The renderer startup check
 also passes after the movement integration.
 
 ```sh
@@ -531,7 +534,7 @@ vehicles or status effects. Selected `Player.aiStep` phases are bound; the full 
 lifecycle remain unfinished.
 Landing now accumulates and resets the stored fall distance, clears climbing
 state on ground, and invokes registered block fall/bounce reactions. The
-[composed landing comparison](../benchmarks/rust-native-landing-2026-10-07/scene-motion.json)
+composed landing comparison
 checks 73,025 operations in 1,449 scenarios against both pinned JARs. It compares
 fall state, impulse exemptions, attributes and ordered damage, statistic,
 particle, sound and hit-ground requests alongside the previous motion fields.
@@ -551,13 +554,13 @@ resident storage; neighbor updates, drops and block-entity lifecycle remain
 unfinished. Block-inside effects such as cobweb slowdown and the full entity
 lifecycle are also unfinished. The reference harness explicitly controls these
 boundaries, which remain outside the comparison's scope.
-The earlier [scene collision comparison](../benchmarks/rust-native-scene-motion-2026-10-07/collision-regression.json)
-and [renderer startup](../benchmarks/rust-native-scene-motion-2026-10-07/startup-smoke.json)
+The earlier scene collision comparison
+and renderer startup
 also pass with this binding and the additional prepared movement resources.
 
-The accompanying [startup check](../benchmarks/rust-native-scene-collision-2026-10-07/startup-smoke.json)
+The accompanying startup check
 passes after sharing scene loading between the GUI and headless collision probe.
-An [interactive Linux check](../benchmarks/rust-native-scene-collision-2026-10-07/interactive-smoke.json)
+An interactive Linux check
 enables F4, holds Shift to descend, verifies that the camera stops at the terrain
 surface, and exits with Ctrl+Q. The window was visually inspected on Vulkan
 llvmpipe; this is not a hardware performance measurement.
@@ -573,16 +576,16 @@ selected strict-reader numeric/syntax limits. The numeric scanner also preserves
 vanilla's rejection when its wrapping integer accumulator hits zero before
 another digit, including in ignored fields. Twenty newly exposed acceptance
 mismatches were corrected; the complete comparison now covers 5,340 models.
-The [resolution](../benchmarks/rust-resource-number-scanner-2026-10-06/model-resolution.json),
-[baking](../benchmarks/rust-resource-number-scanner-2026-10-06/model-baking.json) and
-[animation](../benchmarks/rust-resource-number-scanner-2026-10-06/sprite-animation.json)
+The resolution,
+baking and
+animation
 comparisons also pass with the shared scanner correction.
 
 ```sh
 python3 tools/test_cuboid_model_parity.py
 ```
 
-The [archived decoder result](../benchmarks/rust-resource-number-scanner-2026-10-06/model-decoding.json)
+The archived decoder result
 records source, fixture and reference hashes. The oracle uses actual client
 classes; those rendering APIs are absent from the server. The decoder, parent
 resolver and baker now feed the development gallery. Blockstate selection, transformed
@@ -594,7 +597,7 @@ each display context. It shares inherited elements rather than cloning them.
 Texture aliases bind after child overrides are applied; successful and failed
 alias walks are cached. Missing resources use the native missing-model cube;
 parent cycles invalidate their descendants. The
-[resolution comparison](../benchmarks/rust-model-resolution-2026-10-06/scoped-parity.json)
+resolution comparison
 matches **5,648 requested roots across 439 graphs**, including the full bundled
 block-model catalog, missing parents, 702 cyclic roots, 1,024-model parent chains,
 512-slot alias chains, explicit empty geometry and identity/null transforms.
@@ -609,7 +612,7 @@ Cuboid baking now produces positions in block units, normalized unit-atlas UVs,
 face winding and facing, material references, tint indices, shade overrides and
 light-emission metadata. It supports single-axis and Euler element rotations
 with the pinned rescaling rule. The
-[baking comparison](../benchmarks/rust-model-baking-2026-10-06/scoped-parity.json)
+baking comparison
 matches **7,100 roots across 440 graphs**, using native `FaceBakery` with a real
 sprite and the default JOML math options. All bundled block models bake without
 errors. Synthetic coverage includes reversed/degenerate bounds, signed zero,
@@ -628,7 +631,7 @@ their native validation runs.
 `BlockModelTransform` now prepares all 64 XYZ quarter-turn combinations once
 and shares them across baked models. It rotates geometry around the block center,
 rotates culling directions and applies UV locking in the original face basis.
-The [transformed baking comparison](../benchmarks/rust-blockstate-transforms-2026-10-06/scoped-parity.json)
+The transformed baking comparison
 checks every distinct model/rotation/UV-lock tuple in bundled blockstates and
 all 128 rotation/lock combinations on 81 synthetic models, plus further arbitrary
 element rotations. Positions, UVs and every orientation/inverse-face matrix
@@ -641,7 +644,7 @@ python3 tools/test_blockstate_transform_parity.py
 ```
 
 Blockstate resources now decode into ordered variant selectors and multipart
-conditions. The [native blockstate comparison](../benchmarks/rust-blockstate-model-decoding-2026-10-06/scoped-parity.json)
+conditions. The native blockstate comparison
 covers all 1,288 bundled definitions and 1,351 synthetic cases (2,639 total,
 468 expected rejections). It uses the same `StrictJsonParser` and
 `BlockStateModelDispatcher.CODEC` as the pinned loader. The Rust representation
@@ -654,7 +657,7 @@ python3 tools/test_blockstate_model_parity.py
 ```
 
 Property binding now selects variant roots or multipart part indices for an
-ordered native state list. The [binding comparison](../benchmarks/rust-blockstate-model-binding-2026-10-06/scoped-parity.json)
+ordered native state list. The binding comparison
 covers all 1,288 bundled definitions against 35,723 registered block states plus
 the four special item-frame states, followed by synthetic overlap, malformed
 selector and predicate cases: 3,802 definitions and 687,466 state results match,
@@ -665,7 +668,7 @@ selections. The controlled chunk renderer now uses this binder for its model
 catalog.
 
 The Java integer-property parser is shared by `horizon-core`, client binding and
-world-state decoding. Its [codec regression](../benchmarks/rust-blockstate-model-binding-2026-10-06/shared-integer-codec.json)
+world-state decoding. Its codec regression
 matches 221,261 output lines against each authenticated client/server JAR.
 
 ```sh
@@ -676,7 +679,7 @@ python3 tools/test_blockstate_binding_parity.py
 those choices across bound states. Selecting an ordinary single variant consumes
 no random draw; a weighted singleton still does. Multipart collection draws a
 seed even for an empty subset and resets the same stream before each chosen
-part. The [native choice comparison](../benchmarks/rust-blockstate-model-choice-2026-10-06/scoped-parity.json)
+part. The native choice comparison
 uses actual `WeightedVariants.collectParts` and `MultiPartModel.collectParts`
 with inert observable leaves. All seven distinct bundled weight patterns,
 synthetic large weights and random multipart graphs produce matching selections
@@ -703,11 +706,11 @@ and resource-loader failure recovery are outside this comparison.
 python3 tools/test_sprite_animation_parity.py
 ```
 
-The [animation comparison](../benchmarks/rust-sprite-animation-2026-10-06/scoped-parity.json)
+The animation comparison
 records 907 fixtures and 258,996 native tick states from the actual client codec
 and `SpriteContents.AnimationState.tick`, including all 63 bundled animated
 texture metadata sections and synthetic boundary cases. The associated
-[startup report](../benchmarks/rust-sprite-animation-2026-10-06/startup-smoke.json)
+startup report
 checks the renderer using this shared implementation. Images, input
 fixtures and native traces stay private under `.local/`.
 
@@ -741,10 +744,10 @@ are not evidence of a hardware speedup.
 
 The model gallery was also inspected at close range on Linux/Vulkan llvmpipe.
 With the camera stationary, screenshot differences were confined to the lantern
-as its frames changed. The [model-client startup report](../benchmarks/rust-native-model-client-2026-10-06/startup-smoke.json)
+as its frames changed. The model-client startup report
 records the bounded presentation check and the scope of this visual inspection.
 
-The [blockstate-client report](../benchmarks/rust-native-blockstate-client-2026-10-06/startup-smoke.json)
+The blockstate-client report
 also checks all 16 gallery placements against actual Java registry binding, root
 baking and model collection using `state.getSeed(position)`. A tagged empty
 geometry adapter identifies the 20 selected model parts and their transforms;
@@ -759,7 +762,7 @@ coverage across all registered states and suppression-rule families. Integrating
 that result with resident chunk model meshing is now covered by the scene check
 below.
 
-The [resident-model report](../benchmarks/rust-native-chunk-models-2026-10-06/startup-smoke.json)
+The resident-model report
 checks all 10,919 occupied cells in the bounded startup scene against a separately
 constructed native scene. Actual Java state-model selection, parent geometry,
 rotated culling directions and `Block.shouldRenderFace` produce the same 5,991
@@ -770,12 +773,12 @@ neighbor seams and cavities; cube projection tests cover all XYZ quarter turns.
 These checks cover CPU mesh behavior and GPU startup, not native shader pixels
 or a hardware performance comparison.
 
-The [landing interactive smoke check](../benchmarks/rust-native-landing-2026-10-07/interactive-smoke.json)
+The landing interactive smoke check
 exercises F5 walking from the initial camera position. The player lands at y=4,
 resets fall distance and records one damage request of 9.0. That historical
 checkpoint preceded the health integration below. The Linux window exits cleanly after visual inspection.
 
-The [health integration comparison](../benchmarks/rust-native-health-2026-10-07/scene-motion.json)
+The health integration comparison
 connects actual server-player hurt to the same live attributes, synchronized
 health/absorption storage and hunger state used by the resident player. It checks
 90,065 operations in 1,881 scenarios against both pinned JARs. Repeated hits,
@@ -798,16 +801,16 @@ death consumer marks the stored actor dead and queues a request; drops, removal,
 respawn and the death screen are unfinished. F5 constructs a fresh development
 actor when walking is enabled. This is not vanilla respawn behavior.
 
-The [health interactive smoke check](../benchmarks/rust-native-health-2026-10-07/interactive-smoke.json)
+The health interactive smoke check
 enables walking and F3 diagnostics, lands from the initial position, then walks
 and jumps before exiting. Health falls from 20 to 11, matching the single damage
 request of 9.0; the cooldown expires to zero. The final report is grounded at y=4
 with 110 movement ticks and no error. The ground view was visually inspected.
-The [startup check](../benchmarks/rust-native-health-2026-10-07/startup-smoke.json)
+The startup check
 also passes with the additional health resources. These are Linux development
 checks, not release acceptance or a hardware performance comparison.
 
-The [hunger integration comparison](../benchmarks/rust-native-hunger-2026-10-07/scene-motion.json)
+The hunger integration comparison
 checks 196,489 operations in 2,837 scenarios against both pinned references.
 The resident simulation now ticks hunger after movement. It binds actual food,
 saturation, exhaustion and timer fields to the same live health and attribute
@@ -828,7 +831,7 @@ difficulty with natural regeneration enabled. At that checkpoint food item use,
 movement-distance exhaustion, effect ticks, full death/respawn services and save integration remained
 unfinished.
 
-The [interactive hunger check](../benchmarks/rust-native-hunger-2026-10-07/interactive-smoke.json)
+The interactive hunger check
 enabled walking and F3 diagnostics on Linux. After one landing damage request
 of 9, stored health recovered from 11 to 12.5 as saturation fell from 5 to 3;
 food remained 20 and exhaustion ended at 1. The player remained alive and
@@ -838,7 +841,7 @@ The development client pauses movement without focus, so wall time is not
 simulation time. This checks the resident simulation and window, not full
 gameplay, release acceptance or hardware performance.
 
-The [movement statistics comparison](../benchmarks/rust-native-movement-statistics-2026-10-07/scene-motion.json)
+The movement statistics comparison
 checks 215,204 operations in 5,510 scenarios against both pinned references.
 The resident simulation now feeds the change in player position to the movement
 statistics method after movement and before hunger ticking. Sprint distance
@@ -859,7 +862,7 @@ fixtures; that checkpoint used dry, standing resident physics. Combined scenes e
 repeated movement, sprint-state changes, jumps, hunger consumption and healing.
 That checkpoint preceded the local sprint controls described below.
 
-The [Linux window check](../benchmarks/rust-native-movement-statistics-2026-10-07/interactive-smoke.json)
+The Linux window check
 enabled walking, showed diagnostics and held W for 650 ms. The player moved from
 `[25, 4, 25]` to `[23.12939004788537, 4, 23.12939004788537]`, remained grounded
 and alive, and exited without an error after 82 movement ticks. Health recovered
@@ -867,7 +870,7 @@ to 14 after the initial fall. The ground view was visually inspected; this is a
 client smoke check, while statistic amounts and exhaustion are checked by the
 native comparisons above.
 
-The [sprint input comparison](../benchmarks/rust-native-sprint-2026-10-07/sprint-input.json)
+The sprint input comparison
 checks 502,112 evolving steps in 146,648 scenarios. It executes the actual
 `LocalPlayer.aiStep` prefix, including `KeyboardInput.tick` and the private
 sprint eligibility and stop methods. A sentinel ends execution at the riding
@@ -878,7 +881,7 @@ of 17 condition flags, keyboard states and previous input, food thresholds,
 timer boundaries, sprint windows from 0 to 10, and double-tap sequences. It
 checks each ordered sprint setter request, including repeated requests.
 
-The [combined sprint scene](../benchmarks/rust-native-sprint-2026-10-07/sprint-scene.json)
+The combined sprint scene
 then checks 13,387 operations in 419 scenarios. Its Java input actor shares the
 native scene actor's food and collision state, and its sprint setters update
 that actor's real attributes. Actual input preparation, movement, distance
@@ -886,7 +889,7 @@ exhaustion, hunger and healing follow. Snapshots compare the sprint timer and
 previous input alongside position, velocity, modifiers and health/food fields.
 Cases include collisions, releasing the sprint key while moving, double taps,
 jumps, and hunger crossing the sprint threshold. The
-[common scene check](../benchmarks/rust-native-sprint-2026-10-07/scene-motion.json)
+common scene check
 also passes against both pinned references.
 
 The walking client now samples sprint input on each simulation tick and uses
@@ -904,8 +907,8 @@ python3 tools/test_sprint_input_parity.py
 python3 tools/test_native_scene_motion.py --sprint-input
 ```
 
-Linux window checks exercised both [Left Ctrl](../benchmarks/rust-native-sprint-2026-10-07/sprint-key-smoke.json)
-and [double-tap W](../benchmarks/rust-native-sprint-2026-10-07/double-tap-smoke.json).
+Linux window checks exercised both Left Ctrl
+and double-tap W.
 The Ctrl run recorded 71 sprint ticks and 1,948 sprint centimeters. The double-tap
 run visibly showed `Sprint true` during the second press and `Sprint false`
 after releasing W. Both runs ended grounded and alive without an error, and
@@ -922,17 +925,17 @@ sliding. After movement, pose-fit checks choose standing, crouching or crawling
 and refresh the cached bounds and eye height. Releasing Shift under a ceiling
 does not force the actor into a standing volume that cannot fit.
 
-The [combined input scene](../benchmarks/rust-native-crouch-2026-10-07/input-scene.json)
+The combined input scene
 checks 21,241 operations in 514 scenarios against the pinned client, including
 the actual `LocalPlayer.aiStep` input prefix and `modifyInput`. The
-[shared scene comparison](../benchmarks/rust-native-crouch-2026-10-07/scene-motion.json)
+shared scene comparison
 checks 223,645 operations in 5,605 scenarios against both pinned JARs. It invokes
 actual native pose selection, dimension refresh and edge backoff. The new cases
 include low ceilings, blocked pose changes, scale and sneaking-speed attributes,
 diagonal ledges, step-height thresholds, jumping, release transitions and landing
 on different materials. Seven output lines per operation compare motion,
 attributes, events, health, hunger, input history and pose/dimension bits.
-The existing [isolated sprint comparison](../benchmarks/rust-native-crouch-2026-10-07/sprint-input.json)
+The existing isolated sprint comparison
 also passes after updating its scene controller.
 
 The native fixture controls pose storage and invokes the actual dimension-refresh
@@ -943,11 +946,11 @@ pose selection; swimming physics, sleeping, flight and death poses are unbound.
 
 The client camera follows the cached eye height with the inspected native float
 smoothing arithmetic. Full camera behavior and pixel parity are not established.
-The [Linux window check](../benchmarks/rust-native-crouch-2026-10-07/interactive-smoke.json)
+The Linux window check
 visibly switched from crouching to standing after releasing Shift. It recorded
 100 crouching ticks and 613 crouching centimeters, ending alive and grounded
 without an error. Both views were inspected. The
-[renderer startup check](../benchmarks/rust-native-crouch-2026-10-07/startup-smoke.json),
+renderer startup check,
 seven client tests and all-target client Clippy also passed. These checks do not
 establish full vanilla gameplay or final Linux release acceptance on the target machine.
 
@@ -974,17 +977,17 @@ that the same number of attribute instances is allocated. It does not sort those
 events to conceal ordering differences. Registry snapshots still compare map and
 modifier contents independently of iteration order.
 
-The [shared scene check](../benchmarks/rust-native-attribute-updates-2026-10-07/scene-motion.json)
+The shared scene check
 passes 234,949 operations in 5,801 scenarios against both pinned JARs. The
-[combined input scene](../benchmarks/rust-native-attribute-updates-2026-10-07/input-scene.json)
+combined input scene
 passes 30,025 operations in 710 scenarios against the client. New cases combine
 health and absorption limits, scale, both waypoint ranges, permanent/transient
 modifiers, repeated refreshes and nonfinite values. Low-tunnel histories exercise
 movement, releasing Shift under a ceiling and changing scale between ticks.
 
-The [Linux walking check](../benchmarks/rust-native-attribute-updates-2026-10-07/interactive-smoke.json)
+The Linux walking check
 recorded 36 sprinting ticks and 36 crouching ticks, ending grounded and alive
 without an error. Its view was inspected. The
-[startup check](../benchmarks/rust-native-attribute-updates-2026-10-07/startup-smoke.json),
+startup check,
 seven client tests and all-target client Clippy passed. Full gameplay parity and
 playable Linux release acceptance on the target machine remain pending.

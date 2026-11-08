@@ -65,7 +65,7 @@ canonicalized on both sides, matching Java's `floatToIntBits`/`doubleToLongBits`
 The local run matches **1,443,539 output lines per reference JAR**. This is a
 count of output records, including repeated checks, not distinct gameplay
 behaviors or a coverage percentage. The metadata-only
-[scoped report](../benchmarks/rust-noise-2026-10-05/scoped-parity.json) records
+scoped report records
 source/input/output hashes and reference identities. The runner removes a prior
 success report before running and rejects source changes during validation.
 CI includes the suite on Linux, Windows and Apple Silicon macOS; the recorded

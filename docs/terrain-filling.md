@@ -32,7 +32,7 @@ Run the differential comparison with:
 python3 tools/test_terrain_parity.py
 ```
 
-The [local report](../benchmarks/rust-terrain-2026-10-06/scoped-parity.json) records
+The local report records
 **7,950,873 matching output lines per reference JAR**, checked against both client
 and server. **114 fixtures** perform **200 fills**; **61 fixtures** enable noise-based
 aquifers. Cases include all seven bundled routers, their aquifer configurations,
@@ -75,7 +75,7 @@ stored values. This also preserves native behavior when an earlier stage is
 assigned again.
 
 Run `python3 tools/test_chunk_stage_parity.py`. The
-[stage report](../benchmarks/rust-chunk-stage-2026-10-06/scoped-parity.json) records
+stage report records
 **8,090,090 matching lines per reference JAR** across 32 fixtures. Every pinned
 block state is inserted and removed under both map groups. The comparison uses
 actual `ProtoChunk.setBlockState` and persisted-status assignment, checking returned

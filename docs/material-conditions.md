@@ -15,7 +15,7 @@ the appropriate floor/ceiling depth and Java's floating-point mapping and casts.
 `MaterialSurface` implements the surface input interface used by this worker.
 
 Run `python3 tools/test_material_condition_parity.py`. The
-[local report](../benchmarks/rust-material-condition-2026-10-06/scoped-parity.json)
+local report
 records **5,627,426 matching output lines per reference JAR** across **245 fixtures**,
 **11,288 initially compiled conditions** and **217,969 context operations**.
 The original Java transport constructs actual vanilla conditions and calls their

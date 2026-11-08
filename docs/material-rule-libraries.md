@@ -18,7 +18,7 @@ reuse a worker context. Workers need matching world random settings and separate
 cached sampler contexts.
 
 Run `python3 tools/test_material_rule_library_parity.py`. The
-[local report](../benchmarks/rust-material-rule-library-2026-10-06/scoped-parity.json)
+local report
 records **678,174 matching output lines per reference JAR**, including **665,712
 rule applications** and **142 codec inputs** across 12 fixtures. The test loads all
 **42 bundled rules**, **8 conditions**, **55 densities**, **64 noises**, **67 biome

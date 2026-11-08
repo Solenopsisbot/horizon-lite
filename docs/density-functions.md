@@ -472,10 +472,10 @@ logical buffer tails, unary and binary combinations, scalar short circuits,
 zero-period failures and partial writes. The runner removes an old success report
 before artifact verification, so a failed run cannot retain a stale success.
 
-The [recorded local comparison](../benchmarks/rust-density-2026-10-05/scoped-parity.json)
+The recorded local comparison
 matched **15,524,627 output lines per reference JAR**.
 
-The separate [float-log comparison](../benchmarks/rust-float-log-2026-10-05/scoped-parity.json)
+The separate float-log comparison
 exhaustively matched **all 4,294,967,296 float input bit patterns** for the compiled
 scalar logarithm against both JARs on the recorded Linux/JDK runtime. Signed zeros,
 subnormals, infinities and NaNs are included; NaN results use Java's canonical

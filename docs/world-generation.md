@@ -59,7 +59,7 @@ Density roots are checked through one compiler per seed and mode. Nonempty
 blending and structure fields are outside these fixtures.
 
 The local run produced **961,693 matching output lines per reference JAR**. The
-[metadata report](../benchmarks/rust-worldgen-2026-10-06/scoped-parity.json) records
+metadata report records
 source hashes, reference identities and resource digests. The runner authenticates
 both artifacts, verifies that their registry resources agree, removes stale success
 reports and rejects source or fixture changes during validation. CI includes the suite on

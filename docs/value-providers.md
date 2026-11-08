@@ -12,7 +12,7 @@ subtraction path. Constant float codecs normalize both signed zeros to positive
 zero. Invalid random bounds return an error without silently replacing a result.
 
 Run `python3 tools/test_value_provider_parity.py`. The
-[local report](../benchmarks/rust-value-provider-2026-10-06/scoped-parity.json)
+local report
 records **429,920 matching lines per vanilla JAR**, across **504 definitions** and
 **5,040 seeded fixtures**. The suite invokes actual provider codecs, reads declared
 bounds and compares up to 64 samples per valid fixture. Every sample is followed
@@ -39,7 +39,7 @@ behavior even for symmetric bounds. Anchor resolution and bound arithmetic wrap
 as signed Java integers.
 
 Run `python3 tools/test_height_provider_parity.py`. The
-[height-provider report](../benchmarks/rust-height-provider-2026-10-06/scoped-parity.json)
+height-provider report
 records **507,660 matching lines per JAR**. The suite compares actual
 `HeightProvider.CODEC` parsing and up to 32 samples per valid definition/context,
 with subsequent random longs. It covers all four anchors, ordinary and overflowing

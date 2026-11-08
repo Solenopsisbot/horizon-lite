@@ -12,7 +12,7 @@ seed and reads the first eight digest bytes as a little-endian signed long. The
 core keeps a fixed-input implementation without adding runtime dependencies.
 
 Run `python3 tools/test_biome_zoom_parity.py`. The
-[local report](../benchmarks/rust-biome-zoom-2026-10-06/scoped-parity.json) records
+local report records
 **256,933 matching lines per reference JAR**: **4,104 seed hashes**, **169,408 block
 queries** and **83,421 floating-position queries**. Actual vanilla `BiomeManager`
 methods call a traced resolver; the suite compares selected quart coordinates,
@@ -38,7 +38,7 @@ committed; a resolver failure retains the failing section's previous values.
 Inclusive generation bounds select all intersecting sections.
 
 Run `python3 tools/test_biome_chunk_parity.py`. The
-[local chunk report](../benchmarks/rust-biome-chunk-2026-10-06/scoped-parity.json)
+local chunk report
 records **478,340 matching lines per reference JAR** across **20 fixtures** and
 **160 fills**, including **21,120 quart-biome queries**. Native `ProtoChunk` and
 `LevelChunkSection` methods supply the reference behavior. Tests use synthetic
@@ -54,7 +54,7 @@ invalid bounds return an error before mutation.
 
 ## Chunk biome generation
 
-The [generation report](../benchmarks/rust-biome-generation-2026-10-06/scoped-parity.json)
+The generation report
 records **383,072 matching lines per JAR** across **252 fixtures**, **322 fills**,
 **341,504 stored biome values** and **35,910 subsequent block-position lookups**.
 Run `python3 tools/test_biome_generation_parity.py` to compare against actual
@@ -93,13 +93,13 @@ current section separately. A failure preserves that section's old values;
 later sections can observe earlier completed writes. This matters when supplied
 generation bounds overlap the section selected by the clamped old-column read.
 
-The [retention/fill report](../benchmarks/rust-retrogen-biome-fill-2026-10-06/scoped-parity.json)
+The retention/fill report
 records **593,152 matching lines per reference JAR**, with 40 fixtures, 740 fills
 (560 decorated), and 2,800 direct resolver queries. It includes all activation
 timings, keyed and direct holders, foreign namespace lookalikes, callback failures,
 boundary sections and extreme coordinates.
 
-The expanded [generation report](../benchmarks/rust-retrogen-biome-generation-2026-10-06/scoped-parity.json)
+The expanded generation report
 records **834,080 matching lines per JAR** across **396 fixtures and 610 fills**.
 Its 144 added upgrade fixtures use actual native below-zero metadata and generation
 heights, patterned old biome columns, all source kinds, each retained cave biome,
@@ -122,7 +122,7 @@ center and wrapped block Y, then applies vanilla's highlands/midlands/islands/
 barrens thresholds. Sampler errors propagate without substituting a biome.
 
 Run `python3 tools/test_biome_source_parity.py`. The
-[local source report](../benchmarks/rust-biome-source-2026-10-06/scoped-parity.json)
+local source report
 records **1,306,096 matching lines per JAR**, covering **457 fixtures** and
 **1,147,984 queries**. Actual native source methods supply the results. The corpus
 includes all 63 codec-valid checkerboard scales, unrestricted runtime scales,
@@ -147,7 +147,7 @@ for all four source kinds. Chunk generation and the surface-stage neighborhood
 now use this API; surface integration decodes the source configuration itself.
 
 Run `python3 tools/test_biome_source_codec_parity.py`. The
-[local codec report](../benchmarks/rust-biome-source-codec-2026-10-06/scoped-parity.json)
+local codec report
 records **363,121 matching lines per JAR** across **40,481 inputs**, using all
 **67 biome definitions** and **86 biome tags**. The native `BiomeSource.CODEC`
 supplies parsing, canonical encoding, possible-biome sets and queries at seven

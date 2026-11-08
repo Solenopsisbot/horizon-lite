@@ -13,7 +13,7 @@ negative indices return an error. Rust bounds height to 1–4,064 and positive g
 to 2^24 bits. Invalid construction and allocation limits are explicit errors.
 
 Run `python3 tools/test_carving_mask_parity.py`. The
-[local report](../benchmarks/rust-carving-mask-2026-10-06/scoped-parity.json)
+local report
 records **45,742 matching output lines per reference JAR**, across **28 fixtures**
 and **6,988 operations**. The native `CarvingMask` supplies all reference results.
 The corpus includes sparse and fully filled masks, duplicate insertions, word and
@@ -35,7 +35,7 @@ returns no replacement. Subsequent exposed dirt beneath carved cells is restored
 through `top_material`. Block changes update WG heightmaps; fluid postprocessing
 retains vanilla order and duplicates. Later errors preserve prior effects.
 
-The [combined surface-stage report](../benchmarks/rust-material-stage-2026-10-06/scoped-parity.json)
+The combined surface-stage report
 records **6,733,382 matching lines per JAR**, including **158 carving passes** and
 **21,757,952 block values** across noise filling, surface building and carving.
 Actual `NoiseBasedChunkGenerator.applyCarvingMask` supplies the reference results;
@@ -60,7 +60,7 @@ wrapped step differences and float-rounded thickness before double-distance math
 Traversal has a 2^24-candidate work bound.
 
 Run `python3 tools/test_carving_geometry_parity.py`. The
-[geometry report](../benchmarks/rust-carving-geometry-2026-10-06/scoped-parity.json)
+geometry report
 records **106,699 matching lines per JAR**, across **690 ellipsoids** and **5,536
 reachability queries**. Actual `WorldCarver.carveEllipsoid` and `canReach` supply
 the reference results. Tests compare normalized skip inputs, marked-cell order,
@@ -80,11 +80,11 @@ algorithm, independently of the caller's outer random mode.
 
 Run `python3 tools/test_cave_carver_parity.py` and
 `python3 tools/test_canyon_carver_parity.py`. The
-[cave report](../benchmarks/rust-cave-carver-2026-10-06/scoped-parity.json) records
+cave report records
 **882,005 matching lines per JAR** across **415 fixtures** and **739 requested
 carve invocations**. All three bundled cave definitions are independently
 imported from both JARs. The
-[canyon report](../benchmarks/rust-canyon-carver-2026-10-06/scoped-parity.json)
+canyon report
 records **1,094,517 matching lines per JAR** for the bundled canyon and custom
 shapes across four generation heights.
 

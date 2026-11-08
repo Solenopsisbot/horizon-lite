@@ -31,7 +31,7 @@ Run the differential suite with:
 python3 tools/test_heightmap_parity.py
 ```
 
-The [local metadata report](../benchmarks/rust-heightmap-2026-10-06/scoped-parity.json)
+The local metadata report
 records **1,671,668 matching output lines per reference JAR**, checked separately
 against the authenticated client and server. It covers all **35,723 block states**,
 all six predicate and persistence/client flags, and **100 chunk fixtures** with

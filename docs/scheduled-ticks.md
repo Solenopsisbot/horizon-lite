@@ -131,6 +131,6 @@ area membership, copying, invalid data and atomic saved-list updates. CI runs
 this suite alongside core and world-data comparisons. Evidence stays under
 `.local/rust-tick-parity/`; success reports are cleared before each run and
 source hashes must remain unchanged during validation. The checked-in
-[scoped report](../benchmarks/rust-ticks-2026-10-05/scoped-parity.json) contains
+scoped report contains
 metadata and hashes only. Line counts are corpus observations, not gameplay
 coverage percentages or proof of complete vanilla parity.

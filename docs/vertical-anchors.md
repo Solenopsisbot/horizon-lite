@@ -11,7 +11,7 @@ adapter chooses the larger minimum and smaller height independently, matching
 vanilla; this differs from intersecting the vertical intervals.
 
 Run `python3 tools/test_anchor_parity.py`. The
-[local report](../benchmarks/rust-anchor-2026-10-06/scoped-parity.json) records
+local report records
 **181,632 matching output lines per reference JAR**, across **192 fixtures**,
 **74,112 codec inputs** and **107,328 runtime anchors**. The original Java
 transport calls the actual codecs, helper constructors and generation context,

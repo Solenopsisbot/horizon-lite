@@ -112,7 +112,7 @@ invalid palette indices, sector corruption, the inline/external size boundary,
 unknown-field preservation, failed-writer cleanup and destination collisions.
 CI runs both differential suites. Run artifacts and logs stay under
 `.local/rust-world-parity/`; a stale top-level success report is removed before
-each run. The checked-in [report](../benchmarks/rust-world-2026-10-05/scoped-parity.json)
+each run. The checked-in report
 contains metadata and hashes only.
 
 These are synthetic storage fixtures, not a generated world's full save/load
@@ -136,7 +136,7 @@ The adapter owns block-support geometry; this interface does not implement every
 block's support shape.
 
 Run `python3 tools/test_fluid_parity.py`. The
-[fluid report](../benchmarks/rust-fluid-2026-10-06/scoped-parity.json) records
+fluid report records
 **243,331 matching lines per JAR**. It compares all 35,723 block states, five fluid
 identities, every fluid-family pair, own-height bits, source/falling/full flags and
 legacy block conversion. An additional 2,432 fluid-state JSON fixtures compare

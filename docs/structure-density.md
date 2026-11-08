@@ -26,7 +26,7 @@ Run:
 python3 tools/test_structure_density_parity.py
 ```
 
-The [local report](../benchmarks/rust-structure-density-2026-10-06/scoped-parity.json)
+The local report
 records **1,360,095 matching output lines per reference JAR** across **183 fixtures**,
 **28,093 scalar queries** and **339 volumes**. The original Java adapter calls the
 actual `Beardifier` constructor and samplers. Cases include every adjustment mode,

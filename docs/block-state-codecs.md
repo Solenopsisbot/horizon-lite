@@ -12,7 +12,7 @@ This codec is separate from `BlockRegistry::resolve`, whose descriptor validatio
 continues to reject invalid properties.
 
 Run `python3 tools/test_block_state_codec_parity.py`. The
-[local report](../benchmarks/rust-block-state-codec-2026-10-06/scoped-parity.json)
+local report
 records **221,261 matching output lines per reference JAR**, covering all
 **35,723 states**, **1,286 blocks**, **146 integer properties** and **185,538 decoding
 inputs**. Tests exercise default/full encoding, namespaces, invalid types,

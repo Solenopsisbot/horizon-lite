@@ -33,7 +33,7 @@ ticking while the task runs, whoever is in it. The progress goes to the server l
 and to the player who started it, and once more when it is done. A task is not kept across a restart:
 start it again and the chunks already saved load instead of generating.
 
-On a server with `max_view_distance` set ([hosting](hosting.md#seeing-further-max_view_distance)), the
+On a server with `max_view_distance` set (hosting), the
 players see the pregenerated chunks past `view_distance` as well: that ring only sends saved chunks.
 
 ## How it works

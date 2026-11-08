@@ -142,8 +142,8 @@ and reference hashes. A runner removes its prior success report before running
 and rejects edits to the captured sources during validation. Passing these suites
 does not prove whole-game parity or any FPS/render-distance improvement.
 
-Checked-in [geometry metadata](../benchmarks/rust-geometry-2026-10-05/scoped-parity.json)
-and [cached-collision metadata](../benchmarks/rust-collision-2026-10-05/scoped-parity.json)
+Checked-in geometry metadata
+and cached-collision metadata
 identify their tested source versions. Reports cover their recorded snapshots;
 later changes require fresh validation.
 
@@ -155,7 +155,7 @@ point, including integer-coordinate boundaries. Run
 `python3 tools/test_entity_obstruction_parity.py` to compare against the actual
 vanilla `EntityGetter` default methods and entity metadata queries.
 
-The [entity-obstruction report](../benchmarks/rust-entity-obstruction-2026-10-06/scoped-parity.json)
+The entity-obstruction report
 records **15,121 matching output lines per JAR** over composite shapes, boundary
 contacts, thin boxes, metadata filters, vehicle roots and injected query failures.
 The Java fixture privately allocates entity snapshots without running their
@@ -173,7 +173,7 @@ a shared property table. Predicates query this table in constant time.
 
 `python3 tools/test_block_properties_parity.py` compares all **35,723 states** and
 **18,096 synthetic cache/flag/shape cases**, including adjacent floating-point values
-around solidity thresholds and both occlusion flag values. The [block-properties report](../benchmarks/rust-block-properties-2026-10-06/scoped-parity.json)
+around solidity thresholds and both occlusion flag values. The block-properties report
 records **197,180 matching lines per JAR**. Definition flags, collision and raw
 occlusion data are private runtime inputs; Rust calculates solidity and solid
 rendering and caches full-face occlusion masks. Every state and synthetic shape
@@ -186,8 +186,8 @@ native bounds differ from occupied boxes. Repeated queries share face identities
 The FULL, CENTER and RIGID support tests execute against the selected shape.
 `python3 tools/test_face_support_parity.py` compares **1,615 input shapes** and
 nested faces, producing **595,686 matching lines per JAR** in the
-[face-support report](../benchmarks/rust-face-support-2026-10-06/scoped-parity.json).
-The [refreshed geometry report](../benchmarks/rust-geometry-2026-10-06/scoped-parity.json)
+face-support report.
+The refreshed geometry report
 also retains **1,320,187 matching lines per JAR** after face slicing was added.
 Block-specific support-shape selection is a separate layer.
 
@@ -197,7 +197,7 @@ checks the data kind and full state identities. `None` explicitly requests
 uncached behavior; it never becomes an assumed unsupported face.
 `python3 tools/test_block_support_parity.py` compares **35,524 cached states**
 across six directions and three support kinds, while retaining **199 uncached
-states**. The [cached-support report](../benchmarks/rust-block-support-2026-10-06/scoped-parity.json)
+states**. The cached-support report
 records **248,867 matching lines per JAR**.
 
 Face-cache storage is now lazy and attached to shape identity. Clones share it;
@@ -211,7 +211,7 @@ Dynamic support selection now handles bamboo collision offsets, dripstone and
 sulfur-spike thickness/direction, the empty-context scaffolding support shape,
 powder snow, and shulker animation-state support faces. Moving-piston lookup
 preserves missing/wrong block-entity behavior and delegates active entity shape
-calculation to the world. The [dynamic-support report](../benchmarks/rust-dynamic-support-2026-10-06/scoped-parity.json)
+calculation to the world. The dynamic-support report
 records **4,867,780 matching lines per JAR** over **107,308 fixtures** covering all
 **199 uncached states**, coordinate boundaries, block-entity snapshots and query
 failures. Run `python3 tools/test_dynamic_support_parity.py` to reproduce it.
@@ -231,7 +231,7 @@ rules; entity pushing itself is not implemented by this module.
 
 `python3 tools/test_piston_shape_parity.py` compares **102,315 fixtures**,
 including every registered moved state and **10,000 raw float interpolation
-cases**. The [piston-shape report](../benchmarks/rust-piston-shape-2026-10-06/scoped-parity.json)
+cases**. The piston-shape report
 records **1,096,811 matching lines per JAR**. This corpus uses absent block
 entities for moved-block collision selection. Workspace tests, warning-free
 Clippy and **142 Python tests** passed. Tick progression and live world mutation
@@ -273,7 +273,7 @@ require a fresh run without `--resume`. Checkpoints stay under `.local`, and
 a parity report is written only after both native comparisons pass.
 
 `python3 tools/test_block_survival_parity.py` compares actual native `canSurvive`
-calls in both pinned JARs. The [block-survival report](../benchmarks/rust-block-survival-2026-10-06/scoped-parity.json)
+calls in both pinned JARs. The block-survival report
 records **35,998,488 matching output lines per JAR** across **9,229,463 fixtures**.
 Each supported candidate state is exercised; behavior representatives are tested
 against every neighbor state, changing repeated reads, integer-coordinate
@@ -298,7 +298,7 @@ with the second fluid as their argument, and propagate failures.
 
 `python3 tools/test_collision_context_parity.py` exercises actual native factories
 and queries over **8,338 context snapshots**, comparing **225,126 output lines per
-JAR**. The [context report](../benchmarks/rust-collision-context-2026-10-06/scoped-parity.json)
+JAR**. The context report
 records the pinned artifacts and exact source/input/output hashes. The corpus
 includes adjacent representable values around height thresholds, empty shapes,
 integer-coordinate extremes, NaN/infinity, null entities, item count boundaries,
@@ -317,7 +317,7 @@ No-context support and contextual collision share the same immutable stable shap
 
 `python3 tools/test_scaffolding_collision_parity.py` compares all **32 states**
 across **56,448 fixtures**, producing **524,300 matching lines per JAR** in the
-[scaffolding report](../benchmarks/rust-scaffolding-collision-2026-10-06/scoped-parity.json).
+scaffolding report.
 The native context dispatch executes against a world proxy that rejects all
 queries. Full shape coordinates, bounds, ordered boxes and cube metadata match
 for empty, position, entity and placement contexts, including adjacent doubles
@@ -335,7 +335,7 @@ still follow those query rules. Above-block coordinates wrap as Java integers.
 `python3 tools/test_liquid_collision_parity.py` compares all **32 water/lava block
 states**, all **33 possible above-block liquid/empty states**, full selected shape
 data and ordered callback traces, including failures at each query. The
-[liquid-collision report](../benchmarks/rust-liquid-collision-2026-10-06/scoped-parity.json)
+liquid-collision report
 records **571,179 matching lines per JAR**. Standing shapes and fluid abilities are
 controlled inputs in this suite; each entity type still needs its implementation.
 Fluid spreading, swimming, drowning and live movement remain pending.
@@ -350,7 +350,7 @@ The API takes current entity metadata and lazy tag/equipment providers.
 
 `python3 tools/test_powder_snow_collision_parity.py` compares **63,336 fixtures**
 and **599,180 matching lines per JAR** in the
-[powder-snow report](../benchmarks/rust-powder-snow-collision-2026-10-06/scoped-parity.json).
+powder-snow report.
 The native block method and walkability predicate execute over controlled entity
 snapshots. The corpus covers fall-distance and top-height boundaries, nonfinite
 values, falling-block instances, item counts, query failures and skipped queries.
@@ -369,7 +369,7 @@ continue through explicit behavior implementations.
 `python3 tools/test_contextual_collision_parity.py` validates integrated dispatch
 for all **35,723 states**, **11 contexts** and both fluid-flag inputs:
 **785,906 fixtures** and **2,391,334 matching output lines per JAR** in the
-[contextual-registry report](../benchmarks/rust-contextual-collision-2026-10-06/scoped-parity.json).
+contextual-registry report.
 Outputs compare cache-relative shape equality or full uncached geometry, plus
 ordered world/entity callbacks. This integration corpus supplies missing block
 entities; active shulker and piston snapshots retain their separate suites.
@@ -384,12 +384,12 @@ shapes keep distinct identities. Older exports remain readable and report
 `has_canonical_identities() == false`; they cannot establish the canonical identity
 needed by vanilla's block-collision iterator fast path.
 
-The [canonical-identity report](../benchmarks/rust-canonical-collision-2026-10-06/scoped-parity.json)
+The canonical-identity report
 adds identity checks for every cached state: **5,566 canonical empty**, **3,348
 canonical full-block** and **26,610 other cached states**, with **1,132,980 matching
 output lines per JAR**. The integrated contextual comparison also passes again
 with **2,391,334 lines per JAR** in its
-[regression report](../benchmarks/rust-canonical-collision-2026-10-06/contextual-regression.json).
+regression report.
 Five import tests cover legacy data, equal-but-distinct grids, canonical restoration
 and malformed identity metadata. Workspace Clippy passes without warnings.
 
@@ -405,7 +405,7 @@ values. Providers supply current block metadata and contextual shape selection.
 
 `python3 tools/test_block_collision_scan_parity.py` compares **4,176 fixtures**
 and **517,820 matching lines per JAR** in the
-[collision-scan report](../benchmarks/rust-block-collision-scan-2026-10-06/scoped-parity.json).
+collision-scan report.
 The native iterator runs over controlled metadata, shapes and chunk availability;
 traces cover early termination, missing chunks, query failures, thin/zero-width
 bounds, integer-coordinate wrapping and equal shapes with different canonical
@@ -427,11 +427,11 @@ count as suffocating. Tag changes require rebinding the suffocation registry.
 `python3 tools/test_suffocation_parity.py` checks all **35,723 states** with natural,
 empty and all-block tag bindings at four positions, including integer extremes.
 Every shulker state also covers absent/wrong block entities, all animation states
-and query failures. The [suffocation report](../benchmarks/rust-suffocation-2026-10-06/scoped-parity.json)
+and query failures. The suffocation report
 records **1,697,193 matching lines per JAR**, including scan flags and query traces.
 These are registry predicates; live collision-world binding, movement and
 suffocation damage remain separate integration work.
-The [contextual regression](../benchmarks/rust-suffocation-2026-10-06/contextual-regression.json)
+The contextual regression
 also passes again with **2,391,334 lines per JAR**, and its all-state native audit
 now compares large-shape and moving-piston flags. Workspace Clippy passes.
 
@@ -448,7 +448,7 @@ canonical identity metadata, because their unit-block fast paths can differ.
 selection. Additional scenes cover partial/dynamic blocks, chunk and build-height
 boundaries, missing chunks, replacements, early termination and query failures.
 Shulker fixtures deliberately give the chunk and global providers different
-entities to check routing. The [resident collision report](../benchmarks/rust-resident-collision-scan-2026-10-06/scoped-parity.json)
+entities to check routing. The resident collision report
 records **3,046,929 matching output lines per JAR**. Six collision import/binding
 tests pass, including legacy-metadata rejection; workspace Clippy passes.
 Live chunk loading, entity lifecycle, movement and the playable client remain
@@ -468,13 +468,13 @@ registered blocks and resident Java sections, comparing the Rust world collector
 and step solver. Every registered state appears as an obstacle; additional cases
 cover step heights, grounded/falling motion, ceilings, partial/dynamic blocks,
 chunk boundaries, zero/underflow motion and failures during collection. The
-[world movement report](../benchmarks/rust-world-movement-2026-10-07/scoped-parity.json)
+world movement report
 records **7,062,798 matching lines per JAR**. Entity collider lists, border
 proximity/shapes and collision contexts are controlled fixture inputs. Actual
 entity selection, border state, travel/gravity/velocity, grounded side effects
 and playable integration remain pending.
 
-The [geometry regression](../benchmarks/rust-world-movement-2026-10-07/geometry-regression.json)
+The geometry regression
 passes again with **1,320,187 lines per JAR**, including the existing native step
 fixtures. All six movement unit tests and workspace Clippy pass. New tests cover
 owned-query failures during both initial and step collection and signed zero
@@ -493,7 +493,7 @@ Providers retain responsibility for live storage and each entity type's policy.
 default vehicle-root checks and controlled policy overrides, including failures
 at query/callback boundaries. Tiny/zero-width and nonfinite query boxes, inflated
 boundary contacts, spectators, shared vehicles, null sources and ordered shape
-outputs are covered. The [entity collision report](../benchmarks/rust-entity-collision-2026-10-07/scoped-parity.json)
+outputs are covered. The entity collision report
 records **158,558 matching lines per JAR**. Workspace Clippy passes. This adds the
 selection helper needed by movement; live entity indexing, lifecycle and
 entity-type policy implementations remain pending.
@@ -510,7 +510,7 @@ inclusive minimum/exclusive maximum tests and native floating-point order.
 
 `python3 tools/test_world_border_parity.py` compares actual `WorldBorder` mutation
 sequences, extent metadata, complete shape geometry and proximity predicates.
-The [border report](../benchmarks/rust-world-border-2026-10-07/scoped-parity.json)
+The border report
 records **1,138,830 matching lines per JAR**, including zero/large durations,
 wrapping start timestamps, completion, retargeting, signed zero, extreme finite
 centers/sizes and nonfinite query/interpolation inputs. The supported construction
@@ -531,7 +531,7 @@ world or returning a fabricated successful velocity.
 `python3 tools/test_restitution_parity.py` executes actual
 `Entity.restituteMovementAfterCollisions` on living and nonliving snapshots with
 controlled block restitution and suppression tags. The
-[restitution report](../benchmarks/rust-restitution-2026-10-07/scoped-parity.json)
+restitution report
 records **177,090 matching lines per JAR**. Fixtures cover changing lazy getter
 values, signed zero/nonfinite arithmetic, bounce callbacks that alter velocity,
 and failures before/after each side effect. Workspace Clippy passes. Registered
@@ -549,14 +549,14 @@ flag writes.
 `python3 tools/test_ground_support_parity.py` compares actual
 `CollisionGetter.findSupportingBlock`, `Entity.checkSupportingBlock` and both
 `setOnGroundWithMovement` overloads. The
-[ground support report](../benchmarks/rust-ground-support-2026-10-07/scoped-parity.json)
+ground support report
 records **342,709 selection lines and 151,444 state-transition lines per JAR**,
 covering ties, nonfinite entity positions, missing chunks, query errors, nullable
 movement and sequential changes of support. Shape/context snapshots are controlled;
 registry-backed scanning has separate integration coverage. Workspace Clippy
 passes. Full live entity movement, support-dependent effects and gameplay remain
 pending.
-The [shared scanner regression](../benchmarks/rust-ground-support-2026-10-07/scan-regression.json)
+The shared scanner regression
 also passes with **517,820 matching lines per JAR** after extending its fixtures.
 
 
@@ -569,7 +569,7 @@ columns or a non-unit current factor.
 
 `python3 tools/test_movement_support_parity.py` compares the actual native methods
 with controlled state/tag/property snapshots. The
-[movement support report](../benchmarks/rust-movement-support-2026-10-07/scoped-parity.json)
+movement support report
 records **51,572 matching lines per JAR**, including float boundaries, nonfinite
 positions/offsets/factors, tag/type short circuits and errors at every query.
 Workspace Clippy passes. Registered movement-property provisioning, living-entity
@@ -586,7 +586,7 @@ provider to the support-position and factor calculations, rejecting unknown IDs.
 property getters for every state, then runs actual entity support/factor queries
 over all **35,723 states / 1,286 blocks** under normal, empty and universal tags.
 Mixed-block scenes and failing providers check query order. The
-[registered movement report](../benchmarks/rust-movement-registry-2026-10-07/scoped-parity.json)
+registered movement report
 records **2,300,888 matching lines per JAR**. Three import/binding tests and
 workspace Clippy pass. This provisions movement data; full player travel, live
 entity state and block bounce effects remain separate integration work.
@@ -599,12 +599,12 @@ small-displacement threshold. A failed time lookup leaves the accumulator intact
 
 `python3 tools/test_piston_movement_parity.py` runs actual
 `Entity.limitPistonMovement` across sequential tick/push inputs. The
-[piston movement report](../benchmarks/rust-piston-movement-2026-10-07/scoped-parity.json)
+piston movement report
 records **325,197 matching lines per JAR**, including repeated/opposing pushes,
 threshold neighbors, signed zero, nonfinite inputs and injected failures.
 Workspace Clippy passes. Piston block events, entity pushing and the surrounding
 `Entity.move` lifecycle remain pending.
-The [registered movement regression](../benchmarks/rust-piston-movement-2026-10-07/movement-registry-regression.json)
+The registered movement regression
 passes again with **2,300,888 lines per JAR** on the integrated sources.
 
 
@@ -616,12 +616,12 @@ even if its supplied shape is empty. Collision contexts are supplied explicitly.
 
 `python3 tools/test_world_collision_check_parity.py` executes native
 `CollisionGetter.noCollision` over registered blocks and resident Java sections.
-The [world collision-check report](../benchmarks/rust-world-collision-check-2026-10-07/scoped-parity.json)
+The world collision-check report
 records **4,793,095 matching lines per JAR**. All states, context variants, empty
 and disjoint controlled entity/border shapes, missing chunks, boundaries and
 provider failures are covered. Workspace Clippy passes. Null-entity overloads,
 actual entity-list/border providers and live player ledge behavior remain pending.
-The [shared movement regression](../benchmarks/rust-world-collision-check-2026-10-07/movement-regression.json)
+The shared movement regression
 also passes with **7,062,798 matching lines per JAR**.
 
 
@@ -633,7 +633,7 @@ returns an error without fabricating a successful displacement.
 
 `python3 tools/test_edge_backoff_parity.py` executes actual player methods with
 controlled collision-free query results. The
-[edge backoff report](../benchmarks/rust-edge-backoff-2026-10-07/scoped-parity.json)
+edge backoff report
 records **46,578 matching lines per JAR**, covering all mover types, flight/crouch
 guards, fall/step and 0.05 thresholds, nonfinite values and query failures. Two
 query-budget unit tests and workspace Clippy pass. Registered-world ledge probes,
@@ -649,7 +649,7 @@ falling, step-height, chunk-edge, diagonal, dynamic-block and guard/error cases.
 
 `python3 tools/test_world_edge_backoff_parity.py` passes with
 **27,109,699 matching lines per JAR** in the
-[world ledge report](../benchmarks/rust-world-edge-backoff-2026-10-07/scoped-parity.json).
+world ledge report.
 The shared fixture now supports player probes alongside direct movement and
 collision checks; workspace Clippy passes. Entity lists, border applicability and
 collision contexts remain controlled snapshots. A complete player movement/travel
@@ -664,7 +664,7 @@ Errors preserve completed field writes and callback effects.
 
 `python3 tools/test_fall_damage_parity.py` runs actual `Entity.checkFallDamage`
 with controlled water, landing and event providers. The
-[base fall report](../benchmarks/rust-fall-damage-2026-10-07/scoped-parity.json)
+base fall report
 records **44,566 matching lines per JAR**, including nonfinite arithmetic, float
 underflow, callback mutations and failures at every boundary. Workspace Clippy
 passes. Living-entity fluid/particle behavior, registered block landing effects,
@@ -682,7 +682,7 @@ ignore clears grace time while retaining the impact position until a later reset
 
 `python3 tools/test_living_fall_parity.py` compares actual living methods and
 sequential impulse changes. The
-[living fall report](../benchmarks/rust-living-fall-2026-10-07/scoped-parity.json)
+living fall report
 records **153,025 matching lines per JAR**, including changing immunity, passenger
 callback mutations, nonfinite arithmetic, sound threshold selection and failures
 after partial state changes. Workspace Clippy passes. Attribute provisioning,
@@ -698,7 +698,7 @@ relative teleport even when that displacement is zero.
 
 `python3 tools/test_block_push_parity.py` compares actual `Block.pushEntitiesUp`
 with controlled shapes and selected entity lists. The
-[block push report](../benchmarks/rust-block-push-2026-10-07/scoped-parity.json)
+block push report
 records **101,006 matching lines per JAR**, including empty/redundant geometry,
 partial shapes, large coordinates, nonfinite entity boxes, mutations of later
 entities and failures after partial effects. Workspace Clippy passes. Registered
@@ -715,7 +715,7 @@ protection, mob griefing, sounds, writes and events retain native order.
 
 `python3 tools/test_block_landing_parity.py` invokes registered native methods for
 all **35,723 states / 1,286 blocks** with eight entity class families. The
-[registered landing report](../benchmarks/rust-block-landing-2026-10-07/scoped-parity.json)
+registered landing report
 records **3,524,267 matching lines per JAR**, including float/double boundaries,
 NaN/infinity, failed writes, callback failures, egg hatch preservation and
 farmland collision pushes. Targeted Clippy passes. Actual health, live entity
@@ -731,7 +731,7 @@ sound/event callbacks can change fields observed by subsequent operations.
 
 `python3 tools/test_movement_emission_parity.py` compares actual native movement
 emission, block vibration dispatch, flapping and next-step arithmetic. The
-[movement emission report](../benchmarks/rust-movement-emission-2026-10-07/scoped-parity.json)
+movement emission report
 records **598,611 matching lines per JAR** across **53,036 fixtures**, including
 predicate combinations, sound/event modes, differing support blocks, nonfinite
 numbers, mutations and provider failures. Targeted Clippy passes. Sound callbacks
@@ -748,7 +748,7 @@ movement metadata. Callbacks can change fields read by later phases.
 
 `python3 tools/test_entity_move_parity.py` invokes actual `Entity.move` with native
 shape resolution and zero restitution. The
-[movement lifecycle report](../benchmarks/rust-entity-move-2026-10-07/scoped-parity.json)
+movement lifecycle report
 records **543,653 matching lines per JAR**, covering signed zero, tiny/nonfinite
 movement, collisions, early exits, recording cap, authority guards, landing
 mutations/removal and failures after partial writes. Targeted Clippy passes.
@@ -765,7 +765,7 @@ zero-delay Nether portals. Traversal limits and invalid geometry return errors.
 
 `python3 tools/test_world_ray_parity.py` compares actual `BlockGetter.clip` and
 native `ClipContext` modes. The
-[world ray report](../benchmarks/rust-world-ray-2026-10-07/scoped-parity.json)
+world ray report
 records **248,725 matching lines per JAR**, including inside hits, ties, misses,
 interaction geometry, short/signed-zero rays, lazy predicates/rules and provider
 failures. Targeted Clippy passes. Separate limit tests distinguish a miss from
@@ -782,7 +782,7 @@ noncanonical cached shapes retain their own identities.
 
 `python3 tools/test_fluid_shape_parity.py` runs every registered native fluid state
 in changing query sequences. The
-[fluid shape report](../benchmarks/rust-fluid-shape-2026-10-07/scoped-parity.json)
+fluid shape report
 records **387,950 matching lines per JAR** across **5,181 sequences**, comparing
 geometry, cache population, canonical/alias identities, query suppression and
 failures. Targeted Clippy passes. The pinned registry has no amount-nine state;
@@ -798,7 +798,7 @@ importer while preserving eight native shape identities.
 
 `python3 tools/test_interaction_shape_parity.py` compares every registered state
 and actual native interaction-face overrides with supplied collision geometry.
-The [interaction shape report](../benchmarks/rust-interaction-shape-2026-10-07/scoped-parity.json)
+The interaction shape report
 records **188,682 matching lines per JAR** across all **35,723 states**. Native
 interaction-shape world queries are rejected by the fixture. Import checks reject
 wrong table kind, partial mappings, missing canonical metadata, foreign state
@@ -814,7 +814,7 @@ invalid state IDs are rejected.
 
 `python3 tools/test_registry_fall_ray_parity.py` compares actual registered
 `BlockGetter.clip` behavior with native block/fluid tags and shape getters. The
-[registered fall-ray report](../benchmarks/rust-registry-fall-ray-2026-10-07/scoped-parity.json)
+registered fall-ray report
 records **3,024,623 matching lines per JAR** across **120,297 fixtures**, including
 all **35,723 states**, tag reloads, server/client distinctions, player type checks,
 portal delays, changing above-fluid states, shared cache reuse and failures.
@@ -830,7 +830,7 @@ callbacks can mutate fields; failures retain preceding writes.
 
 `python3 tools/test_living_landing_parity.py` invokes actual
 `LivingEntity.checkFallDamage` and its base implementation. The
-[living landing report](../benchmarks/rust-living-landing-2026-10-07/scoped-parity.json)
+living landing report
 records **244,844 matching lines per JAR**, including server/nonserver levels,
 water changes, numeric boundaries, particle locations/counts, callback failures,
 field mutations and climbing cleanup. Targeted Clippy passes. Fluid immersion,
@@ -846,7 +846,7 @@ slide suppression. Native float arithmetic and quantized trigonometry are kept.
 
 `python3 tools/test_living_air_parity.py` invokes the actual native private air,
 relative movement, climbing, speed, friction and input-vector methods. The
-[air travel report](../benchmarks/rust-living-air-2026-10-07/scoped-parity.json)
+air travel report
 records **443,554 matching lines per JAR**, including both player/nonplayer
 classes, changed ground/climbing predicates, missing client chunks, levitation,
 nonfinite boundaries, callback mutations and failures. Targeted Clippy passes.
@@ -863,7 +863,7 @@ movement mutations visible to subsequent velocity updates.
 
 `python3 tools/test_living_fluid_parity.py` compares the actual native travel and
 fluid helper methods. The
-[fluid travel report](../benchmarks/rust-living-fluid-2026-10-07/scoped-parity.json)
+fluid travel report
 records **265,100 matching lines per JAR**, including sprint changes, movement
 efficiency, dolphin effects, shallow-fluid boundaries, escape probes, ridden
 float guards, nonfinite values, callback mutations and failures. Targeted Clippy
@@ -879,7 +879,7 @@ preserve partial writes when providers fail.
 
 `python3 tools/test_living_motion_parity.py` compares the corresponding actual
 living methods plus `Entity.applyGravity` and `addDeltaMovement`. The
-[jump and gravity report](../benchmarks/rust-living-motion-2026-10-07/scoped-parity.json)
+jump and gravity report
 records **113,623 matching lines per JAR**, including float thresholds, extreme
 raw effect amplifiers, signed zero/nonfinite values, rider classes, callback
 mutations and failures. Targeted Clippy passes. Entity-type jump/flight overrides,
@@ -894,7 +894,7 @@ and implements the flying ability's fluid-affection predicate.
 
 `python3 tools/test_player_travel_parity.py` invokes actual `Player.travel`,
 `getFlyingSpeed` and `isAffectedByFluids`. The
-[player travel report](../benchmarks/rust-player-travel-2026-10-07/scoped-parity.json)
+player travel report
 records **120,933 matching lines per JAR**, including ability and velocity
 mutations, callback failures, signed zero/nonfinite positions and the distinction
 between direct ability fields and virtual ability access. Targeted Clippy passes.
@@ -911,7 +911,7 @@ the previous climbing position. Unknown members/properties and IDs are rejected.
 
 `python3 tools/test_climbing_parity.py` invokes actual registered
 `LivingEntity.onClimbable` and trapdoor support checks. The
-[climbing report](../benchmarks/rust-climbing-2026-10-07/scoped-parity.json)
+climbing report
 records **3,820,054 matching lines per JAR** across all **35,723 states**, including
 all trapdoor states against every registered ladder facing, tag reloads,
 spectator/gliding guards, captured positions, mutations and failures. Targeted
@@ -929,7 +929,7 @@ registries and query-budget exhaustion return explicit errors.
 `python3 tools/test_fluid_occupancy_parity.py` compares actual
 `LevelReader.containsAnyLiquid`, `BoxBlockMatcher` and `BlockScanUtils` with
 native ProtoChunk sections. The
-[liquid occupancy report](../benchmarks/rust-fluid-occupancy-2026-10-07/scoped-parity.json)
+liquid occupancy report
 records **116,664 matching lines per JAR**, including fluid presence for all
 **35,723 states**, public chunk/section query order, height boundaries, palette
 changes/compaction and failures. Rust-only checks verify typed budget, nonfinite
@@ -946,13 +946,13 @@ errors and separate query budgets remain visible to the caller.
 
 `python3 tools/test_free_space_parity.py` invokes actual `Entity.isFree`, native
 collision iteration and liquid scanning on the corresponding resident ProtoChunk
-storage. The [free-space report](../benchmarks/rust-free-space-2026-10-07/scoped-parity.json)
+storage. The free-space report
 records **5,764,046 matching lines per JAR** across all **35,723 states**, offsets,
 fluid/context variants, height boundaries, required missing chunks and failures.
 Targeted Clippy passes. Entity lists, border applicability and collision contexts
 are controlled; chunk generation, live entity indexing and full playable
 integration remain pending.
-The [collision-only regression](../benchmarks/rust-free-space-2026-10-07/collision-regression.json)
+The collision-only regression
 also passes **4,793,095 matching lines per JAR** after extending the shared
 fixture and registry binding.
 
@@ -966,7 +966,7 @@ addition with its finite-input filter and fresh velocity read.
 
 `python3 tools/test_entity_fluid_parity.py` invokes actual
 `EntityFluidInteraction` and `Entity.addDeltaMovement`. The
-[entity fluid report](../benchmarks/rust-entity-fluid-2026-10-07/scoped-parity.json)
+entity fluid report
 records **607,338 matching lines per JAR** with real ProtoChunk fluid-presence
 sections, ordered/reloaded overlapping tags, wet/dry sequences, eye boundaries,
 nonfinite heights/current arithmetic, mutations and injected failures. Rust-only
@@ -985,7 +985,7 @@ upward-face and IceBlock guards, then normalize the resulting vector.
 
 `python3 tools/test_fluid_flow_parity.py` invokes actual registered
 `FluidState.getFlow`, `FlowingFluid.getFlow` and its solid-face helper. The
-[fluid flow report](../benchmarks/rust-fluid-flow-2026-10-07/scoped-parity.json)
+fluid flow report
 records **1,051,071 matching lines per JAR** from **51,846 fixtures** covering all
 registered fluid states, neighboring families/heights, per-face wall flags,
 falling deflection, wrapping coordinates and query failures. Targeted Clippy
@@ -1002,7 +1002,7 @@ rejected explicitly; tag reloads use a new immutable binding.
 
 `python3 tools/test_registry_fluid_parity.py` compares actual registered height,
 camera immersion, current vectors and solid-face queries. The
-[registered fluid report](../benchmarks/rust-registry-fluid-2026-10-07/scoped-parity.json)
+registered fluid report
 records **2,446,969 matching lines per JAR** from **409,389 fixtures**, covering all
 **35,723 block states**, waterlogged contents, cached/dynamic support, natural and
 reloaded tags, neighboring fluid families, coordinate wrapping and failures.
@@ -1021,11 +1021,11 @@ attribute to select its current coefficient.
 
 `python3 tools/test_entity_fluid_tick_parity.py` invokes actual
 `Entity.updateFluidInteraction` with native immersion and current application.
-The [entity fluid tick report](../benchmarks/rust-entity-fluid-tick-2026-10-07/scoped-parity.json)
+The entity fluid tick report
 records **953,830 matching lines per JAR**, including changing push predicates,
 first-tick/entry flags, simultaneous water/lava, attribute selection, nonfinite
 arithmetic, callback mutations and failures around partial writes. The
-[immersion regression](../benchmarks/rust-entity-fluid-tick-2026-10-07/immersion-regression.json)
+immersion regression
 also passes **607,338 lines per JAR** after extending the shared fixtures.
 Targeted Clippy passes. Splash dispatch is controlled; audio/particle generation,
 full live entity/world binding and playable integration remain pending.
@@ -1038,14 +1038,14 @@ world provider, preserving captured positions and partial-write order.
 
 `python3 tools/test_registered_entity_fluid_parity.py` invokes actual
 `EntityFluidInteraction` with registered fluid and support behavior. The
-[registered immersion report](../benchmarks/rust-registered-entity-fluid-2026-10-07/scoped-parity.json)
+registered immersion report
 records **6,550,126 matching lines per JAR**, including all **35,723 states** in
 immersed and above-eye cells, mixed water/lava neighborhoods, waterlogged blocks,
 ordered/reloaded tags, current velocities, tracker retention and query failures.
 Targeted Clippy passes. Shared-fixture regressions also pass:
-[tick composition](../benchmarks/rust-registered-entity-fluid-2026-10-07/tick-regression.json)
+tick composition
 (**953,830 lines per JAR**) and
-[controlled immersion](../benchmarks/rust-registered-entity-fluid-2026-10-07/immersion-regression.json)
+controlled immersion
 (**607,338 lines per JAR**). Chunk presence and section wet flags are controlled,
 and block entities are absent here; full live chunk/entity lifecycle, fluid
 propagation and playable gameplay remain pending.
@@ -1058,7 +1058,7 @@ eye-in-water state, passenger guards, captured block position and final state
 writes only after all required queries succeed.
 
 `python3 tools/test_swimming_parity.py` compares actual Entity/Player methods.
-The [swimming report](../benchmarks/rust-swimming-2026-10-07/scoped-parity.json)
+The swimming report
 records **191,142 matching lines per JAR**, including flag combinations, native
 fluid tag membership, failures/mutations, and f32 eye-height boundaries/nonfinite
 values. Targeted Clippy passes. Synchronized entity storage, full input/tick
@@ -1071,7 +1071,7 @@ lookup. Submerged boats retain those bounds; other boats restrict immersion to
 the portion strictly above their top, returning no box when none remains.
 
 `python3 tools/test_fluid_box_parity.py` compares actual entity/boat methods. The
-[fluid box report](../benchmarks/rust-fluid-box-2026-10-07/scoped-parity.json)
+fluid box report
 records **92,822 matching lines per JAR**, including actual boat status values,
 virtual modifier dispatch, thin/inverted bounds, waterline boundaries, signed
 zero/nonfinite values and mutations/failures. Targeted Clippy passes. Vehicle
@@ -1087,7 +1087,7 @@ explicit error after preserving preceding effects and RNG consumption.
 
 `python3 tools/test_water_splash_parity.py` invokes actual
 `Entity.doWaterSplashEffect` with native legacy and xoroshiro random generators.
-The [water splash report](../benchmarks/rust-water-splash-2026-10-07/scoped-parity.json)
+The water splash report
 records **192,506 matching lines per JAR** across **7,840 fixtures**, including
 sound thresholds, self/other passengers, particle positions/velocities, callback
 mutations/failures, nonfinite arithmetic and the next RNG value after the effect.
@@ -1108,7 +1108,7 @@ semantics and self-replacement behavior.
 
 `python3 tools/test_attribute_parity.py` compares actual `AttributeInstance`
 methods using every registered attribute definition. The
-[attribute report](../benchmarks/rust-attributes-2026-10-07/scoped-parity.json)
+attribute report
 records **1,404,798 matching lines per JAR** across **2,391 fixtures**, including
 collision clusters, resize/shrink boundaries, seeded operation sequences,
 reference identity, observer cache reads/failures, nonfinite values and signed
@@ -1127,7 +1127,7 @@ missing modifiers remain distinguishable, including lookup after instantiation.
 
 `python3 tools/test_entity_attribute_parity.py` compares actual `AttributeMap`
 operations with **40 registered attributes** and **93 entity suppliers**. The
-[entity attribute report](../benchmarks/rust-entity-attributes-2026-10-07/scoped-parity.json)
+entity attribute report
 records **1,771,555 matching lines per JAR** across **4,720 fixtures**. Targeted
 Clippy passes. The exporter asserts that registered default suppliers contain no
 modifiers. Set membership is observed in registry order: this does not establish
@@ -1143,7 +1143,7 @@ writes when callbacks fail. Heal and starvation requests use explicit world
 hooks, which can mutate food state before subsequent tick work.
 
 `python3 tools/test_food_parity.py` compares actual `FoodData` methods. The
-[food report](../benchmarks/rust-food-2026-10-07/scoped-parity.json) records
+food report records
 **180,878 matching lines per JAR** across **15,211 fixtures**, including 240-tick
 sequences, threshold boundaries, all difficulties, callback mutation/failure,
 signed zero and nonfinite arithmetic. Targeted Clippy passes. World rules,
@@ -1159,7 +1159,7 @@ float types, normalize float signed zero and preserve unrelated player fields.
 
 `python3 tools/test_food_storage_parity.py` compares actual `FoodData` persistence
 through `TagValueInput`/`TagValueOutput`. The
-[food storage report](../benchmarks/rust-food-storage-2026-10-07/scoped-parity.json)
+food storage report
 records **45,955 matching lines per JAR**, covering every NBT numeric type,
 missing/wrong-type fields, conversion boundaries, nonfinite values and save/load
 round trips. Targeted Clippy passes. ProblemReporter diagnostics and the complete
@@ -1176,7 +1176,7 @@ single float item.
 
 `python3 tools/test_living_health_parity.py` compares actual LivingEntity/Player
 methods and actual `SynchedEntityData` float items. The
-[living health report](../benchmarks/rust-living-health-2026-10-07/scoped-parity.json)
+living health report
 records **442,007 matching lines per JAR**, covering nonfinite values, signed
 zeros/NaN equality, forced updates, dirty extraction, health-data replacement
 during callbacks and partial effects after exceptions. Targeted Clippy passes.
@@ -1192,7 +1192,7 @@ without losing partial health writes. Base living absorption uses field storage.
 
 `python3 tools/test_attribute_health_parity.py` composes actual registered
 `AttributeMap`, LivingEntity/Player health methods, `SynchedEntityData` and
-`FoodData`. The [composition report](../benchmarks/rust-attribute-health-2026-10-07/scoped-parity.json)
+`FoodData`. The composition report
 records **666,082 matching lines per JAR**, including all **93 entity suppliers**,
 attribute base/modifier changes, real regeneration health writes, 100-tick hunger
 sequences and failed synchronization callbacks. Targeted Clippy passes. The
@@ -1210,16 +1210,16 @@ release-process workload of 20,000 held-live zombie attribute maps, using five
 fresh processes per case. Median process RSS changed from **175,820 to 12,848
 KiB** with defaults only, and **175,800 to 29,076 KiB** with four active attributes
 per entity. Both cases retain the same health-read checksum. The
-[before](../benchmarks/rust-attribute-memory-2026-10-07/before.json) and
-[after](../benchmarks/rust-attribute-memory-2026-10-07/after.json) reports record
+before and
+after reports record
 samples and source hashes; the baseline entity implementation is `fd185a6`.
 RSS includes runtime, catalog and allocator overhead. This is not whole-game
 memory, a timing benchmark or evidence of an FPS improvement.
 
 The optimized implementation passes both pinned JAR comparisons again:
-[entity attributes](../benchmarks/rust-attribute-memory-2026-10-07/entity-regression.json)
+entity attributes
 (**1,771,555 lines per JAR**) and
-[health/hunger composition](../benchmarks/rust-attribute-memory-2026-10-07/health-regression.json)
+health/hunger composition
 (**666,082 lines per JAR**). Targeted Clippy passes.
 
 
@@ -1228,7 +1228,7 @@ It preserves the nonnull-weapon/server-level guards and clamps modified armor
 effectiveness only after the server enchantment hook.
 
 `python3 tools/test_combat_rules_parity.py` compares actual `CombatRules` methods.
-The [combat rules report](../benchmarks/rust-combat-rules-2026-10-07/scoped-parity.json)
+The combat rules report
 records **184,248 matching lines per JAR**, including armor/toughness boundaries,
 random float bit patterns, nonfinite/signed-zero values, query mutations/failures,
 null/empty/unenchanted weapons and server/nonserver branches. Native unenchanted
@@ -1246,7 +1246,7 @@ writes and effects.
 
 `python3 tools/test_living_damage_parity.py` compares actual LivingEntity/Player
 methods with real final absorption clamping and controlled phase/storage sinks.
-The [living damage report](../benchmarks/rust-living-damage-2026-10-07/scoped-parity.json)
+The living damage report
 records **161,198 matching lines per JAR**, including entity/player paths, attacker
 types, stat limits/rounding, nonfinite values, mutations and failures at query
 boundaries. Targeted Clippy passes. Armor/magic results, health storage, combat/
@@ -1261,7 +1261,7 @@ direct food storage; manoeuvre eligibility uses virtual food and ability lookups
 `StoredPlayerFood` binds these operations to ordinary mutable `FoodData` state.
 
 `python3 tools/test_player_food_parity.py` compares actual Player methods and
-native FoodData. The [player food report](../benchmarks/rust-player-food-2026-10-07/scoped-parity.json)
+native FoodData. The player food report
 records **32,723 matching lines per JAR**, covering direct/virtual distinctions,
 captured food identity during mutations, guard short-circuiting, injected failures,
 nonfinite exhaustion and integer hunger boundaries. The stored-state binding is
@@ -1277,7 +1277,7 @@ Armor attributes floor to Java's saturated integer range before float conversion
 
 `python3 tools/test_damage_reduction_parity.py` compares actual living methods
 for base entities and ServerPlayer receivers. The
-[damage reduction report](../benchmarks/rust-damage-reduction-2026-10-07/scoped-parity.json)
+damage reduction report
 records **78,069 matching lines per JAR**, covering bypass combinations,
 resistance/stat boundaries, numeric edges, query failures/mutations and actual
 empty-equipment protection iteration. Targeted Clippy passes. Equipment is empty;
@@ -1292,7 +1292,7 @@ and prefix effects when an observer or field lookup fails. Callbacks may reenter
 the table to set/assign fields or drain existing dirty values.
 
 `python3 tools/test_synced_floats_parity.py` compares actual `SynchedEntityData`.
-The [synchronized float report](../benchmarks/rust-synced-floats-2026-10-07/scoped-parity.json)
+The synchronized float report
 records **554,909 matching lines per JAR**, including forced/equal updates,
 received duplicates, reentrant operations, missing IDs, callback failures and
 NaN/signed-zero equality. Native gaps are untouched default float items; observed
@@ -1309,7 +1309,7 @@ The final absorption setter still applies the registered maximum before writing.
 `python3 tools/test_player_health_parity.py` compares actual Player methods,
 registered player attributes and `SynchedEntityData`, exporting the actual pinned
 health/absorption field IDs. The
-[player health report](../benchmarks/rust-player-health-2026-10-07/scoped-parity.json)
+player health report
 records **243,146 matching lines per JAR**, covering modified limits, healing,
 absorption reads/writes, combined dirty/default lists, received assignments,
 callback packet drains and failures. Targeted Clippy passes. Observer effects
@@ -1326,7 +1326,7 @@ health modules, and player exhaustion retains its ability/client guards.
 `python3 tools/test_server_player_damage_parity.py` compares the native Player
 inner damage method on ServerPlayer receivers, using actual native reduction,
 registered modified attributes, synchronized data and FoodData. The
-[server-player damage report](../benchmarks/rust-server-player-damage-2026-10-07/scoped-parity.json)
+server-player damage report
 records **373,455 matching lines per JAR**, covering repeated hits, bypass flags,
 resistance, numeric edges, armor attribute mutation, dirty packet drains and
 callback failures. Targeted Clippy passes. Empty equipment and controlled
@@ -1343,7 +1343,7 @@ after the inner hit in fresh-hit and cooldown-difference branches.
 
 `python3 tools/test_living_hurt_parity.py` invokes the native LivingEntity method
 directly on base and ServerPlayer receivers. The
-[living hurt report](../benchmarks/rust-living-hurt-2026-10-07/scoped-parity.json)
+living hurt report
 records **441,413 matching lines per JAR**, including numeric edges, repeated
 hits, callback mutations/failures, empty-hand death-protection lookup, native
 soundless blocking components and victim criteria with no listeners. Targeted
@@ -1361,7 +1361,7 @@ separately for the peaceful, easy and hard branches as in vanilla.
 
 `python3 tools/test_player_hurt_parity.py` compares actual Player and ServerPlayer
 methods through the native living hurt sequence. The
-[player hurt report](../benchmarks/rust-player-hurt-2026-10-07/scoped-parity.json)
+player hurt report
 records **410,880 matching lines per JAR**, including all three-query difficulty
 combinations, player/arrow-owner PvP gates, repeated hits and callback failures.
 Targeted Clippy passes. Native downstream living services retain the controlled
@@ -1377,7 +1377,7 @@ returns and repeated source-tag queries across the inheritance layers.
 
 `python3 tools/test_damage_immunity_parity.py` compares each native layer on
 ServerPlayer receivers, retaining native empty-equipment enchantment iteration.
-The [damage immunity report](../benchmarks/rust-damage-immunity-2026-10-07/scoped-parity.json)
+The damage immunity report
 records **170,314 matching lines per JAR**, including mixed damage tags, rule
 precedence, virtual flag mutations and callback failures. Targeted Clippy passes.
 Source/rule queries and virtual flags are controlled; registered source/rule
@@ -1393,7 +1393,7 @@ attribution, knockback, death and other world services remain explicit.
 
 `python3 tools/test_server_player_combat_parity.py` compares the actual native
 ServerPlayer hurt chain through actual inner reduction and player storage. The
-[server-player combat report](../benchmarks/rust-server-player-combat-2026-10-07/scoped-parity.json)
+server-player combat report
 records **561,528 matching lines per JAR**, including repeated hits, death
 rejection, modified attributes, cooldown differences, packet drains, numeric
 edges and failures after partial writes. Some fixtures explicitly reset cooldown
@@ -1411,9 +1411,9 @@ run. Native integration retains inherited Entity/LivingEntity/Player/ServerPlaye
 immunity methods, including empty-equipment enchantment iteration, gamerule
 precedence, dimension changes and client-loading guards.
 
-The [combat immunity integration report](../benchmarks/rust-server-player-combat-immunity-2026-10-07/scoped-parity.json)
+The combat immunity integration report
 records **1,176,994 matching lines per JAR**. The standalone inner-damage
-[regression report](../benchmarks/rust-server-player-combat-immunity-2026-10-07/inner-damage-regression.json)
+regression report
 retains **161,198 matching lines per JAR** after extracting the shared body.
 Targeted Clippy passes. Virtual flags, source tags/rule values and the other
 world services listed above remain controlled; the fixture now executes the
@@ -1429,7 +1429,7 @@ causing-entity access before reading player abilities.
 
 `python3 tools/test_damage_source_parity.py` covers all **51 bundled damage
 types and 36 damage-type tags**, using the actual native DamageType codec and
-TagLoader. The [damage-source report](../benchmarks/rust-damage-source-2026-10-07/scoped-parity.json)
+TagLoader. The damage-source report
 records **152,175 matching lines per JAR**, including constructor identities,
 scaling, exhaustion, tag/type membership, position/weapon queries, virtual
 causing-entity replacement, mutations and failures. Targeted Clippy passes.
@@ -1446,7 +1446,7 @@ ServerPlayer hurt chain; thorns also follows its native secondary-sound branch.
 
 `python3 tools/test_registered_player_combat_parity.py` records **1,431,711
 matching lines per JAR** in the
-[registered player-combat report](../benchmarks/rust-registered-player-combat-2026-10-07/scoped-parity.json),
+registered player-combat report,
 covering all 51 damage types and 36 tags, direct/causing entity combinations,
 repeated hits, health/absorption/hunger, cooldown state and callback failures.
 Targeted Clippy passes. Equipment is unenchanted; virtual entity flags/rule
@@ -1462,7 +1462,7 @@ entry's angle condition reaches that check.
 
 `python3 tools/test_blocking_rules_parity.py` compares native BlocksAttacks
 records and direct holder-set membership. The
-[blocking rules report](../benchmarks/rust-blocking-rules-2026-10-07/scoped-parity.json)
+blocking rules report
 records **105,068 matching lines per JAR**, including exact angle boundaries,
 NaN/infinity/signed zero, randomized float bits, source-type mutations and query
 failures. Targeted Clippy passes. Angles are supplied in radians; direction/acos
@@ -1477,7 +1477,7 @@ with this pinned implementation, so platform math is not used for this path.
 
 `python3 tools/test_view_direction_parity.py` compares actual native view vectors
 and Java Math.acos, plus the native view/subtract/normalize/dot/acos composition
-used by blocking. The [view-direction report](../benchmarks/rust-view-direction-2026-10-07/scoped-parity.json)
+used by blocking. The view-direction report
 records **226,459 matching lines per JAR**, including random doubles, inverse-
 cosine boundaries, arbitrary float rotations, degenerate horizontal vectors and
 the widened float-PI fallback. Targeted Clippy passes. Full item-blocking dispatch
@@ -1493,7 +1493,7 @@ the original server-level argument and performs a fresh direct-entity lookup.
 
 `python3 tools/test_item_blocking_parity.py` compares actual LivingEntity
 applyItemBlocking with native components on base and ServerPlayer receivers.
-The [item-blocking report](../benchmarks/rust-item-blocking-2026-10-07/scoped-parity.json)
+The item-blocking report
 records **87,930 matching lines per JAR**, including callback mutations/failures,
 captured items/components, piercing/bypass combinations, native direction/math,
 client/stat guards and melee responses. Targeted Clippy passes. Native stacks
@@ -1508,7 +1508,7 @@ queries preserve the second virtual use-state check.
 
 `python3 tools/test_item_use_parity.py` compares the actual inherited native
 methods with real blocking components and controlled virtual item durations.
-The [item-use report](../benchmarks/rust-item-use-2026-10-07/scoped-parity.json)
+The item-use report
 records **108,690 matching lines per JAR**, covering wrapping tick arithmetic,
 delay boundaries, absent components, empty stacks, shared item types, partial
 float values and callback mutations/failures. Targeted Clippy passes. Full
@@ -1524,7 +1524,7 @@ copy-before-shrink ordering. The non-breaking variant retains its native empty
 break consumer, including unusual invalid component values.
 
 `python3 tools/test_item_durability_parity.py` compares actual unenchanted native
-ItemStack operations. The [durability report](../benchmarks/rust-item-durability-2026-10-07/scoped-parity.json)
+ItemStack operations. The durability report
 records **81,762 matching lines per JAR**, including absent components, empty/air
 stacks, unbreakable flags, integer boundaries, callback mutations and failures.
 Targeted Clippy passes. This is a durability projection, not complete item-stack
@@ -1540,7 +1540,7 @@ pre-shrink stack copy and the caller's original equipment slot.
 
 `python3 tools/test_blocking_item_damage_parity.py` compares actual native
 BlocksAttacks calls into ItemStack storage on non-player, Player and ServerPlayer
-receivers. The [blocking durability report](../benchmarks/rust-blocking-item-damage-2026-10-07/scoped-parity.json)
+receivers. The blocking durability report
 records **71,800 matching lines per JAR**, including scalar float boundaries,
 invalid/absent durability components, statistic item capture, callback mutations
 and failures. Targeted Clippy passes. Stacks are unenchanted; full component
@@ -1554,7 +1554,7 @@ wrapping countdowns, returned-item placement and failure-visible state changes.
 
 `python3 tools/test_item_use_lifecycle_parity.py` compares actual inherited native
 methods and ItemStack dispatch with controlled custom item handlers. The
-[lifecycle report](../benchmarks/rust-item-use-lifecycle-2026-10-07/scoped-parity.json)
+lifecycle report
 records **144,736 matching lines per JAR**, including empty stacks, changed
 held/active items, shared item types, client/server queries, finish vibrations,
 kinetic-map presence and callback mutation/failure ordering. Targeted Clippy
@@ -1570,7 +1570,7 @@ when the final active stack has a kinetic-weapon component.
 
 `python3 tools/test_item_use_start_parity.py` compares inherited native
 startUsingItem and its private equipment packet construction. The
-[start-use report](../benchmarks/rust-item-use-start-2026-10-07/scoped-parity.json)
+start-use report
 records **84,873 matching lines per JAR**, including captured stack/level/hand
 arguments, empty stacks, callback mutation/failure ordering, flag writes, native
 UseEffects/KineticWeapon presence and clearing a populated kinetic-enemy map.
@@ -1588,7 +1588,7 @@ behavior and hide their stored components.
 
 `python3 tools/test_item_use_catalog_parity.py` binds vanilla's actual component
 initializers and confirms both JARs export equivalent defaults. The
-[registered item-use report](../benchmarks/rust-item-use-catalog-2026-10-07/scoped-parity.json)
+registered item-use report
 records **246,715 matching lines per JAR**, covering every item default, count
 changes and component mutation sequences, override behavior, stackability,
 durability and integer/float extremes. Targeted Clippy passes. The imported
@@ -1603,7 +1603,7 @@ native behavior. Entry iteration emits patched values before untouched defaults;
 key-set order instead applies the patch to the prototype's key sequence.
 
 `python3 tools/test_component_patch_parity.py` compares actual native patched
-maps. The [component-patch report](../benchmarks/rust-component-patch-2026-10-07/scoped-parity.json)
+maps. The component-patch report
 records **622,680 matching lines per JAR**, including integer/boxed-float equality,
 NaN/signed zero, copy isolation and mutation-before-error when a restored removal
 has no prototype default. Targeted Clippy passes. Prototypes have at most seven
@@ -1620,13 +1620,13 @@ remains supported through the same interface.
 
 `python3 tools/test_component_durability_parity.py` compares native ItemStack
 operations with nonempty prototypes and observable patches at every callback.
-The [component durability report](../benchmarks/rust-component-durability-2026-10-07/scoped-parity.json)
+The component durability report
 records **83,727 matching lines per JAR**, including original/copy independence
 and mutation-before-error for unsanitized restored removals. Targeted Clippy
 passes. The refactor also preserves both native regression suites:
-[scalar durability](../benchmarks/rust-component-durability-2026-10-07/scalar-regression.json)
+scalar durability
 (**81,762 lines per JAR**) and
-[blocking durability](../benchmarks/rust-component-durability-2026-10-07/blocking-regression.json)
+blocking durability
 (**71,800 lines per JAR**). Full component codecs, enchanted durability, equipment
 and complete gameplay integration remain pending.
 
@@ -1640,7 +1640,7 @@ stack and consumption callbacks that change or fail after a copy is captured.
 
 `python3 tools/test_item_stack_storage_parity.py` compares 7,856 fixtures with
 actual native ItemStack methods and small bound integer-component prototypes.
-The [storage report](../benchmarks/rust-item-stack-storage-2026-10-07/scoped-parity.json)
+The storage report
 records **568,580 matching lines per JAR**. Comparisons include raw and visible
 state, component patch order, stack identity and item/component/count equality.
 Targeted Clippy passes. The fixture arena preserves canonical EMPTY aliases;
@@ -1656,7 +1656,7 @@ container slots and callers can deliberately share the same stack.
 
 `python3 tools/test_simple_container_parity.py` compares actual native container
 and stack methods, including changes and failures in virtual size/change hooks.
-The [container report](../benchmarks/rust-simple-container-2026-10-07/scoped-parity.json)
+The container report
 records **590,402 matching lines per JAR**. It checks alias identity, raw/visible
 counts, empty-stack references, component-sensitive merging, overflow, invalid
 indices and mutation prefixes on failure. In particular, native insertion into
@@ -1674,7 +1674,7 @@ shared across inventories; replacing an inventory retains stack aliases.
 
 `python3 tools/test_player_inventory_parity.py` compares actual native Inventory,
 EntityEquipment and ItemStack methods. The
-[inventory report](../benchmarks/rust-player-inventory-2026-10-07/scoped-parity.json)
+inventory report
 records **790,440 matching lines per JAR**, including invalid-index failure
 prefixes, selected-slot changes, negative equipment removal amounts, ordinary
 versus equipment identity, self-replacement and shared equipment clearing.
@@ -1693,7 +1693,7 @@ handles damaged stacks and creative fallback at their native callback points.
 
 `python3 tools/test_inventory_pickup_parity.py` compares actual native
 Inventory.add/getSlotWithRemainingSpace, ItemStack operations and shared
-equipment. The [pickup report](../benchmarks/rust-inventory-pickup-2026-10-07/scoped-parity.json)
+equipment. The pickup report
 records **424,282 matching lines per JAR**, including source/destination aliases,
 callback mutations, failures, count overflow, invalid slots and the damaged
 copy-and-clear that happens before slot validation. Targeted Clippy passes.
@@ -1710,7 +1710,7 @@ more than once, with each visit updating their shared pop-time counter.
 
 `python3 tools/test_inventory_tick_parity.py` compares actual Inventory.tick,
 EntityEquipment.tick and ItemStack.inventoryTick with custom item handlers. The
-[tick report](../benchmarks/rust-inventory-tick-2026-10-07/scoped-parity.json)
+tick report
 records **195,957 matching lines per JAR**, including empty stacks, callbacks
 that mutate later slots, weakly consistent equipment iteration and failure
 prefixes. The client comparison uses an actual allocated ClientLevel for the
@@ -1726,7 +1726,7 @@ equipment map does not clear the selected stack; clearing the inventory does.
 
 `python3 tools/test_player_equipment_parity.py` compares actual PlayerEquipment
 and inherited LivingEntity hand/slot access over a real native Inventory. The
-[equipment report](../benchmarks/rust-player-equipment-2026-10-07/scoped-parity.json)
+equipment report
 records **408,852 matching lines per JAR**, including selection changes, callback
 mutations/failures, old/new aliases, raw enum-map main-hand entries and the
 selected main-hand override. Targeted Clippy passes. Full onEquipItem effects,
@@ -1742,9 +1742,9 @@ the production reference-counted stack implementation.
 
 The native regressions retain **144,736 lifecycle**, **84,873 start-use** and
 **108,690 eligibility/timing** matching lines per JAR. Reports:
-[lifecycle](../benchmarks/rust-shared-item-use-2026-10-07/item-use-lifecycle.json),
-[start](../benchmarks/rust-shared-item-use-2026-10-07/item-use-start.json),
-[eligibility](../benchmarks/rust-shared-item-use-2026-10-07/item-use.json).
+lifecycle,
+start,
+eligibility.
 Targeted Clippy and all 20 horizon-world library tests pass. Hand queries and
 flags remain controlled in these fixtures; composing them with actual player
 inventory, synchronized flags and full item effects remains pending.
@@ -1758,10 +1758,10 @@ synchronized values.
 
 `python3 tools/test_synced_bytes_parity.py` compares actual byte SynchedEntityData
 and inherited LivingEntity flag methods. The
-[byte/flag report](../benchmarks/rust-synced-bytes-2026-10-07/scoped-parity.json)
+byte/flag report
 records **572,100 matching lines per JAR**, covering all initial bytes, signed
 masks, forced updates, assignments, reentrant callbacks, dirty packing and
-failures. The [float regression](../benchmarks/rust-synced-bytes-2026-10-07/float-regression.json)
+failures. The float regression
 retains **554,909 matching lines per JAR**. Targeted Clippy passes. Mixed-serializer
 storage, entity schemas, wire codecs and full item-use/gameplay integration remain
 pending.
@@ -1775,7 +1775,7 @@ mutable inventory, flag storage and active-use state.
 
 `python3 tools/test_inventory_use_parity.py` compares inherited native lifecycle
 methods composed with real Inventory, PlayerEquipment and SynchedEntityData. The
-[combined report](../benchmarks/rust-inventory-use-2026-10-07/scoped-parity.json)
+combined report
 records **349,310 matching lines per JAR**, including live count mutations,
 selection/offhand changes, equipment callbacks, flag dirty prefixes, completion
 replacement and failed callbacks. Targeted Clippy passes. Item/level effects and
@@ -1792,7 +1792,7 @@ when the byte value is unchanged, while ordinary unchanged writes do not.
 
 `python3 tools/test_use_flag_reaction_parity.py` invokes the inherited native
 observer through actual synchronized writes/assignments, player inventory and
-equipment. The [reaction report](../benchmarks/rust-use-flag-reaction-2026-10-07/scoped-parity.json)
+equipment. The reaction report
 records **366,331 matching lines per JAR**, including duration callbacks,
 empty-but-distinct stack references, signed masks, repeated received values,
 selection/count mutations and failures before dirty marking. Ordinary lifecycle
@@ -1808,7 +1808,7 @@ stack/hand arguments and live state reads retain native callback ordering.
 
 `python3 tools/test_inventory_use_start_parity.py` exercises inherited native
 start-use with actual Inventory, PlayerEquipment and synchronized storage. The
-[start report](../benchmarks/rust-inventory-use-start-2026-10-07/scoped-parity.json)
+start report
 records **9,506 fixtures and 223,004 matching lines per JAR**, including native
 equipment packet construction, observer reactions, callback mutations/failures
 and clearing a populated kinetic-enemy map. Targeted Clippy passes. Packet
@@ -1826,7 +1826,7 @@ previous raw patch, including redundant entries.
 
 `python3 tools/test_item_template_parity.py` compares actual ItemStackTemplate
 and ItemStack validation with scalar max-stack-size/max-damage/damage components.
-The [template report](../benchmarks/rust-item-template-2026-10-07/scoped-parity.json)
+The template report
 records **518,556 matching lines per JAR**, covering zero/negative/overflow-edge
 counts, changed prototypes, component removals, aliasing and validation rollback.
 Targeted Clippy passes. Contained components and bundle-weight validation are
@@ -1842,7 +1842,7 @@ mutations and failures retain their native prefix.
 
 `python3 tools/test_use_remainder_parity.py` compares actual UseRemainder with
 native template creation. The
-[remainder report](../benchmarks/rust-use-remainder-2026-10-07/scoped-parity.json)
+remainder report
 records **353,264 matching lines per JAR**, including canonical EMPTY creation,
 empty-but-distinct inputs, reference replacement and callback failures. Targeted
 Clippy passes. The concrete actor inventory/drop handler, contained-component
@@ -1858,7 +1858,7 @@ It does not recursively apply full strict validation to each contained item.
 
 `python3 tools/test_bundle_weight_parity.py` compares pinned Fraction arithmetic,
 actual BundleContents and ItemStack strict validation. The
-[bundle report](../benchmarks/rust-bundle-weight-2026-10-07/scoped-parity.json)
+bundle report
 records **137,332 matching lines per JAR**, including overflow, negative template
 counts, changed prototypes, cached errors, nested bundles, bee presence, empty
 component visibility and validation order. Targeted Clippy passes. Typed schema
@@ -1874,7 +1874,7 @@ uses the ordered tree; removed arena slots are reused.
 
 `python3 tools/test_java_hash_map_parity.py` compares this API with the actual
 JDK 25 HashMap used by vanilla cooldown storage. The
-[map report](../benchmarks/rust-java-hash-map-2026-10-07/scoped-parity.json) records
+map report records
 **601,084 matching lines** for each pinned-game classpath run, including all-key
 collisions, tree/list transitions, varied removal orders, iterator mutations
 and clear-on-empty behavior. Both runs use the same installed JDK; this is a
@@ -1895,7 +1895,7 @@ the player cooldown manager before adding through the stack's current group.
 `python3 tools/test_item_cooldowns_parity.py` compares actual ItemCooldowns and
 UseCooldown over real stack components, with controlled player/start/end
 callbacks. The
-[cooldown report](../benchmarks/rust-item-cooldowns-2026-10-07/scoped-parity.json)
+cooldown report
 records **167,906 matching lines per JAR**, including colliding identifiers,
 wrapping clocks, zero/negative durations, float edge cases, empty visibility,
 reentrant ticks and mutation/failure prefixes. Targeted Clippy passes. Complete
@@ -1913,10 +1913,10 @@ borrows. Templates and component patches support structural value equality.
 
 `python3 tools/test_item_after_use_parity.py` invokes actual
 ItemStack.finishUsingItem and native remainder/template/cooldown implementations.
-The [completion report](../benchmarks/rust-item-after-use-2026-10-07/scoped-parity.json)
+The completion report
 records **211,804 matching lines per JAR**, including prototype changes, original
 copies, empty aliases and mutations/failures at each effect boundary. The
-[remainder regression](../benchmarks/rust-item-after-use-2026-10-07/remainder-regression.json)
+remainder regression
 retains **353,264 matching lines per JAR**. Targeted Clippy passes. Item handlers
 and actor extra-item delivery remain controlled; concrete consumables, full
 inventory-use binding, contained schemas and complete gameplay remain pending.
@@ -1931,7 +1931,7 @@ Prediction::PREDICTED.
 `python3 tools/test_extra_items_parity.py` composes native item completion,
 remainders and cooldowns with inherited ServerPlayer extra-item handling and
 real Inventory/PlayerEquipment. The
-[delivery report](../benchmarks/rust-extra-items-2026-10-07/scoped-parity.json)
+delivery report
 records **272,124 matching lines per JAR**, including full/partially filled
 inventories, offhand merging, aliased slots, creative material queries, partial
 insertion and callback failures. Targeted Clippy passes. Drop arguments are
@@ -1946,7 +1946,7 @@ sound using the captured source and current position.
 
 `python3 tools/test_food_properties_parity.py` compares actual
 FoodProperties.onConsume with real FoodData and both native random generators.
-The [food listener report](../benchmarks/rust-food-properties-2026-10-07/scoped-parity.json)
+The food listener report
 records **70,632 matching lines per JAR**, including player/non-player actors,
 sound arguments, subsequent random state, changed food stores and positions,
 and callback mutation/failure prefixes. Targeted Clippy passes. Sound playback,
@@ -1962,7 +1962,7 @@ mutations after capture do not alter the particle template.
 `python3 tools/test_item_particles_parity.py` compares inherited
 LivingEntity.spawnItemParticles with real templates and both native random
 generators. The
-[particle report](../benchmarks/rust-item-particles-2026-10-07/scoped-parity.json)
+particle report
 records **143,167 matching lines per JAR**, including exact position/velocity
 bits, empty stacks, negative particle counts, snapshot identity, float edge
 cases, random-source replacement and callback mutation/failure prefixes.
@@ -1979,7 +1979,7 @@ source from the one supplied for sound selection.
 
 `python3 tools/test_consumable_emission_parity.py` composes actual Consumable
 emission with inherited LivingEntity particles and real item templates. The
-[consumable emission report](../benchmarks/rust-consumable-emission-2026-10-07/scoped-parity.json)
+consumable emission report
 records **124,732 matching lines per JAR**, covering all animations, timing
 overflow and float edges, random-source aliases, optional particles, sound
 overrides and callback mutation/failure prefixes. Targeted Clippy passes. Sound
@@ -1997,7 +1997,7 @@ CONSUME without a transformed stack; immediate starts return that stack.
 `python3 tools/test_consumable_parity.py` compares actual Consumable methods
 with concrete FoodProperties/FoodData, inherited particles, shared stacks and
 both native random generators. The
-[consumption report](../benchmarks/rust-consumable-2026-10-07/scoped-parity.json)
+consumption report
 records **246,033 matching lines per JAR**, covering player/non-player/server
 branches, food component changes, stat item selection, empty advancement trigger
 storage, client/server effects, game events, creative material queries and
@@ -2016,7 +2016,7 @@ infinite durations; scaling uses the pinned version's floor and narrowing rules.
 
 `python3 tools/test_status_effect_parity.py` compares actual constructors,
 copy/update operations, duration mapping/scaling, equality and blend copying.
-The [status storage report](../benchmarks/rust-status-effect-2026-10-07/scoped-parity.json)
+The status storage report
 records **655,643 matching lines per JAR**, covering constructor clamping, raw
 amplifiers, shared hidden chains, negative/overflow/infinite durations, float
 edges and mapper mutation/failure behavior. Equality excludes hidden and blend
@@ -2033,7 +2033,7 @@ sound playback captures block position before querying the actor's category.
 
 `python3 tools/test_consume_effect_parity.py` compares the four actual native
 consume-effect classes with real effect instances and random generators. The
-[consume-effect report](../benchmarks/rust-consume-effect-2026-10-07/scoped-parity.json)
+consume-effect report
 records **184,437 matching lines per JAR**, including NaN/probability edges,
 copy identity/details, hidden/blend resets, shared input mutation, return-value
 aggregation, sound arguments and callback failure prefixes. Targeted Clippy
@@ -2051,7 +2051,7 @@ resetting fall distance and impulse context.
 `python3 tools/test_teleport_consume_parity.py` compares actual
 TeleportRandomlyConsumeEffect with both native random generators, ordinary and
 fox actor classes, native offset packing and fall/impulse reset bodies. The
-[teleport consumption report](../benchmarks/rust-teleport-consume-2026-10-07/scoped-parity.json)
+teleport consumption report
 records **282,010 matching lines per JAR**, including exact candidates and
 subsequent random state, height overflow, float edges, attempt exhaustion,
 captured/live positions and callback mutation/failure prefixes. Targeted Clippy
@@ -2067,7 +2067,7 @@ native callback/read ordering, duration-dependent steps and interpolation.
 
 `python3 tools/test_status_tick_parity.py` compares actual MobEffectInstance
 ticks, skipBlending and getBlendFactor with controlled MobEffect callbacks. The
-[status tick report](../benchmarks/rust-status-tick-2026-10-07/scoped-parity.json)
+status tick report
 records **412,552 matching lines per JAR**, including shared hidden chains,
 zero/negative/infinite durations, raw amplifiers, early application failures,
 downgrade notifications, blend float edge cases, removed actors and callback
@@ -2084,11 +2084,11 @@ while allowing the resulting bucket order to differ.
 `python3 tools/test_java_identity_map_parity.py` compares actual JDK 25 HashMap
 operations and copies across mixed key classes. Each Java process exports its
 actual identity hashes for Rust to use in that same scenario. The
-[identity/copy report](../benchmarks/rust-java-identity-map-2026-10-07/scoped-parity.json)
+identity/copy report
 records **577,200 matching lines per classpath run**. The
-[ordered-key regression](../benchmarks/rust-java-identity-map-2026-10-07/ordered-map-regression.json)
+ordered-key regression
 retains **601,084 matching lines**, and the
-[cooldown regression](../benchmarks/rust-java-identity-map-2026-10-07/cooldown-regression.json)
+cooldown regression
 retains **167,906 matching lines per JAR**. Targeted Clippy passes. Map-only runs
 use the same installed JDK; these comparisons do not assert gameplay parity or
 equal identity hashes across processes. Keys must have pure operations; null
@@ -2100,7 +2100,7 @@ as well as `EntityAttributes`. Health limits and armor queries use the borrowed
 store; equipment damage callbacks can update it before damage reduction reads
 armor and toughness. Player absorption retains synchronized float storage.
 
-The [live player combat comparison](../benchmarks/rust-live-player-combat-2026-10-07/scoped-parity.json)
+The live player combat comparison
 runs the identical corpus through both stores and matches 1,176,994 output lines
 against each pinned Java reference. It covers repeated hits, cooldowns, health
 and absorption writes, exhaustion, numeric edges, armor mutation during a hit

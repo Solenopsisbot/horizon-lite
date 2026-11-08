@@ -14,7 +14,7 @@ previous emissions and consumed draws. Probability-range decoding distinguishes
 negative zero from positive zero, matching the native codec.
 
 Run `python3 tools/test_placement_parity.py`. The
-[local report](../benchmarks/rust-placement-2026-10-06/scoped-parity.json) records
+local report records
 **1,268,600 matching lines per reference JAR**, across **520 definitions** and
 **21,840 seeded fixtures**, with **70,080 requested modification calls** and **17,280 direct count queries**. Actual
 `PlacementModifier.CODEC` and modifier callbacks supply the reference results.
@@ -36,7 +36,7 @@ placements. An empty chain calls the feature directly. Errors retain pending and
 modified-position buffers, matching vanilla when the same placer is used again.
 
 Run `python3 tools/test_feature_placement_parity.py`. The
-[chain report](../benchmarks/rust-feature-placement-2026-10-06/scoped-parity.json)
+chain report
 records **548,461 matching lines per JAR**. Actual native `FeaturePlacer` executes
 native modifiers and a synthetic feature sink, comparing emitted positions,
 feature results, consumed randomness and repeated calls after failures. This tests
@@ -107,7 +107,7 @@ flags, wrapped coordinates, ignored false mutation results and partial effects
 when a world operation fails. End-island radius sampling retains native draw order.
 
 Run `python3 tools/test_basic_feature_parity.py`. The
-[feature report](../benchmarks/rust-basic-feature-2026-10-06/scoped-parity.json)
+feature report
 records **1,820,614 matching lines per JAR**. Actual feature codecs and native place
 methods operate on a mutable world proxy. Both random modes, multiple seeds,
 nearby/far chunks, extreme coordinates, rejected writes, thrown failures and
@@ -154,7 +154,7 @@ world bounds, heightmaps and layer classifications from those same chunks.
 all writes and flags to a caller-supplied mutation callback.
 
 Run `python3 tools/test_feature_region_parity.py`. The
-[region report](../benchmarks/rust-feature-region-2026-10-06/scoped-parity.json)
+region report
 records **28,922,634 matching lines per JAR** across 192 fixtures and 2,304 requested
 placements. Actual native features and `FeaturePlacer` operate over a world proxy
 backed by nine `ProtoChunk`s per fixture. The comparison includes both heightmap
@@ -188,7 +188,7 @@ and randomness; each sequence uses one fresh placer across its children.
 Native single-object holder-set shorthand is accepted for sequence/uniform lists.
 
 Run `python3 tools/test_feature_graph_parity.py`. The
-[graph report](../benchmarks/rust-feature-graph-2026-10-06/scoped-parity.json) records
+graph report records
 **1,146,057 matching lines per JAR** for actual native feature codecs and nested
 placement. Cases include empty/malformed lists, singleton and nested choices,
 zero/one probabilities, negative zero, false child results, partial writes, world
@@ -217,7 +217,7 @@ and bounds dependency depth and expanded nodes. Duplicate canonical resource
 names, missing dependencies and cycles return errors.
 
 Run `python3 tools/test_feature_catalog_parity.py`. The
-[catalog report](../benchmarks/rust-feature-catalog-2026-10-06/scoped-parity.json)
+catalog report
 records **2,528,704 matching lines per JAR** against actual registry-aware holder
 codecs, registered feature snapshots and native `TagLoader`. It compares ten
 named features, fifteen placed features, five tag files, nested/duplicate references,
@@ -246,7 +246,7 @@ It preserves wrapping coordinates, write flags, ignored false write results and
 early termination on world errors. Placement consumes no random draws.
 
 Run `python3 tools/test_fill_layer_parity.py`. The
-[fill-layer report](../benchmarks/rust-fill-layer-2026-10-06/scoped-parity.json)
+fill-layer report
 records **1,305,274 matching lines per JAR**, including codec inputs for all
 35,723 pinned states, compact/full states, integer properties, invalid-property
 defaults, height bounds, extreme coordinates, rejected writes and injected query,
@@ -263,7 +263,7 @@ short-circuiting. Random rules draw only after matching identity, including at
 zero/one probability; their codecs allow probabilities outside that interval.
 
 Run `python3 tools/test_rule_test_parity.py`. The
-[rule report](../benchmarks/rust-rule-test-2026-10-06/scoped-parity.json) records
+rule report records
 **1,890,716 matching lines per JAR**, covering every block/state identity, all
 300 bundled block tags, absent and empty-path tags, malformed inputs, reversed
 height ranges, nested logic and subsequent draws from both random streams.
@@ -283,7 +283,7 @@ read/write errors stop evaluation with the preceding mutations and RNG state
 intact. Target decoding shares the graph's node budget when nested in a feature.
 
 Run `python3 tools/test_replace_block_parity.py`. The
-[replacement report](../benchmarks/rust-replace-block-2026-10-06/scoped-parity.json)
+replacement report
 records **303,678 matching lines per JAR** for actual native codecs and placement,
 including rule ordering, shared random state, update flags, rejected writes,
 partial failures, repeated mutations and invalid unselected targets.
@@ -297,7 +297,7 @@ the configured air-exposure probability and ordered directional neighbor checks.
 The first accepted target writes with flag 2; a false write result is ignored.
 
 Run `python3 tools/test_scattered_ore_parity.py`. The
-[scattered-ore report](../benchmarks/rust-scattered-ore-2026-10-06/scoped-parity.json)
+scattered-ore report
 records **758,484 matching lines per JAR** across 11,544 fixtures and 23,088
 requested placements. Cases include size/discard codec boundaries, empty targets,
 solid/mixed worlds, each of the six air-neighbor directions, wrapping positions,
@@ -320,7 +320,7 @@ before resolving a chunk. Raw writes maintain section occupancy but leave chunk
 heightmaps untouched; region write permissions remain the caller's responsibility.
 
 Run `python3 tools/test_bulk_section_parity.py`. The
-[bulk report](../benchmarks/rust-bulk-section-2026-10-06/scoped-parity.json) records
+bulk report records
 **959,640 matching lines per JAR** against actual `BulkSectionAccess` and resident
 `ProtoChunk`s. It covers every state, primed/lazy heightmaps, missing chunks,
 vertical boundaries, packed-coordinate aliases, cache reset and complete final
@@ -337,7 +337,7 @@ when their identities differ. Traversal uses an explicit stack and bounded input
 work; tests include a 50,000-feature dependency chain.
 
 Run `python3 tools/test_feature_sort_parity.py`. The
-[ordering report](../benchmarks/rust-feature-sort-2026-10-06/scoped-parity.json)
+ordering report
 records **411,751 matching lines per JAR** across 3,871 fixtures. Native
 `FeatureSorter` receives identity-distinct dummy payloads for synthetic graphs and
 the feature lists from all 67 bundled biomes, including shuffled/subset combinations.
@@ -353,7 +353,7 @@ Reseeding preserves the counter. Forks and positional factories delegate to the
 underlying source and return its normal draw behavior through a transparent variant.
 
 Run `python3 tools/test_worldgen_random_parity.py`. The
-[random-adapter report](../benchmarks/rust-worldgen-random-2026-10-06/scoped-parity.json)
+random-adapter report
 records **238,800 matching lines per JAR** for 119,100 operations in 300 fixtures.
 It includes one to three nested wrappers, arbitrary signed bit-width shifts,
 failed bounds, parent/child streams, positional UTF-16 hashes and decoration,
@@ -370,7 +370,7 @@ structurally equal placed-feature copies as equal, while feature ordering uses
 object identities.
 
 Run `python3 tools/test_biome_placement_parity.py`. The
-[biome-filter report](../benchmarks/rust-biome-placement-2026-10-06/scoped-parity.json)
+biome-filter report
 records **121,423 matching lines per JAR** for 27,456 requested placements across
 9,152 fixtures. Actual `BiomeFilter` and `FeaturePlacer` compare missing roots,
 equal copies, different features, ordered queries, nested ordinary placement,
@@ -389,7 +389,7 @@ skip subsequent roots. Errors retain previous work and the current-feature
 marker; successful completion clears the marker.
 
 Run `python3 tools/test_decoration_parity.py`. The
-[decoration report](../benchmarks/rust-decoration-2026-10-06/scoped-parity.json)
+decoration report
 records **337,398 matching lines per JAR** across 2,188 fixtures and 4,376 requested
 decoration calls. Actual `ChunkGenerator.applyBiomeDecoration` runs with
 structures disabled, resident `ProtoChunk` biome palettes and traced feature
@@ -408,7 +408,7 @@ reading its biome. Premature reads fail even if raw palette values already exist
 decoration's initial palette collection can still inspect those raw values.
 
 Run `python3 tools/test_decoration_region_parity.py`. The
-[resident decoration report](../benchmarks/rust-decoration-region-2026-10-06/scoped-parity.json)
+resident decoration report
 records **36,173,951 matching lines per JAR** for 240 fixtures and 480 requested
 decoration calls. Java's actual decoration entry point places three basic
 features, configured fill-layer sequences, replacements and scattered ore into
@@ -458,7 +458,7 @@ require a fresh run without `--resume`. Checkpoints stay under `.local`, and
 a parity report is written only after both native comparisons pass.
 
 Run `python3 tools/test_state_provider_parity.py`. The
-[provider report](../benchmarks/rust-state-provider-2026-10-06/scoped-parity.json)
+provider report
 records **257,299,719 matching lines per JAR**, with 356,935 codec inputs
 and 79,473,574 requested samples across ten provider kinds. Every pinned state is decoded and tested
 under all six fixed rotations; random/nested rotations, both sampling methods,
@@ -565,7 +565,7 @@ Provider decoding shares the enclosing graph's bounded work/depth budget; compil
 placement tables are shared by immutable reference-counted handles.
 
 Run `python3 tools/test_simple_block_parity.py` against the pinned JARs. The
-[simple-block report](../benchmarks/rust-simple-block-2026-10-06/scoped-parity.json)
+simple-block report
 records **9,613,872 matching output lines per JAR** across **492,554 fixtures**.
 It covers every candidate state, double-plant obstructions, waterlogging, moss
 attachment/topper combinations, ordered reads/writes, both random streams,
@@ -584,7 +584,7 @@ ordinary fallback read; rejected writes still advance the position. A completely
 zero-height sample returns false, while obstruction that trims every layer to
 zero still returns true.
 
-The [block-column report](../benchmarks/rust-block-column-2026-10-06/scoped-parity.json)
+The block-column report
 records **1,204,081 matching lines per JAR** over **64,120 fixtures**. Run
 `python3 tools/test_block_column_parity.py` to compare all candidate descriptors,
 six directions, both truncation priorities, provider and predicate composition,
@@ -604,7 +604,7 @@ pillar, and a cap's false result does not make the pillar return false. Named ca
 and nested pillars use the same feature catalog and graph work budget.
 
 Run `python3 tools/test_pillar_parity.py`. The
-[pillar report](../benchmarks/rust-pillar-2026-10-06/scoped-parity.json) records
+pillar report records
 **921,111 matching lines per JAR** across **41,746 fixtures**, including every
 candidate descriptor, both vertical directions, continuation boundaries,
 signed-zero probability rejection, replacement conditions, cap composition,
@@ -621,7 +621,7 @@ in order, checks replacement, then visits neighbors in native direction order.
 Exactly one accepted neighbor allows placement; finding a second stops the scan.
 Rejected writes preserve the same subsequent queries and random consumption.
 
-The [neighbor-spread report](../benchmarks/rust-neighbor-spread-2026-10-06/scoped-parity.json)
+The neighbor-spread report
 records **2,650,856 matching lines per JAR** across **79,580 fixtures**. Run
 `python3 tools/test_neighbor_spread_parity.py` to compare all candidate and neighbor
 states, all direction masks, bounded integer providers, named/empty holder sets,
@@ -633,6 +633,6 @@ require complete chunk mutation, neighbor updates and gameplay integration.
 
 The executable feature graph also includes overlay composition, block piles,
 disks, block blobs, springs, vines and underwater magma. Their version-specific
-reports and remaining integration limits are recorded in [Rust rewrite status](rust-parity.md#overlay-feature-composition).
+reports and remaining integration limits are recorded in Rust rewrite status.
 These comparisons cover ordered world requests; complete world updates and
 playable gameplay remain pending.

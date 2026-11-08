@@ -18,7 +18,7 @@ and the neighbor's boolean property availability. Leaf suppression is controlled
 by the cutout-leaves setting. Liquids compare fluid families, including contained
 water in waterlogged neighbors. Mangrove roots suppress vertical internal faces.
 
-The [native comparison](../benchmarks/rust-face-visibility-2026-10-06/scoped-parity.json)
+The native comparison
 calls actual `BlockState.skipRendering` and `Block.shouldRenderFace` with pinned
 tags bound in both reference JARs. It covers all 35,723 states and 1,286 block
 definitions: 1,441,816 ordered state pairs, six directions and two leaf settings

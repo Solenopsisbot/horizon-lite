@@ -13,7 +13,7 @@ results across sea-level changes. NaN values are recomputed, including vanilla's
 eviction behavior when a cached NaN is queried at capacity.
 
 Run `python3 tools/test_biome_temperature_parity.py`. The
-[local report](../benchmarks/rust-biome-temperature-2026-10-06/scoped-parity.json)
+local report
 records **836,659 matching output lines per reference JAR** over **387 fixtures**,
 including **12 thread-isolation fixtures**. The original Java transport invokes
 actual biome methods and inspects native ordered cache contents. Test inputs
