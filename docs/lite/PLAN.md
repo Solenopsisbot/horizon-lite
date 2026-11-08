@@ -22,6 +22,7 @@ estimated.
 | Java (resource-prepare exporters) | 52,657 | 51,267 | −1,390 |
 | Markdown | 40,027 | 12,196 | −27,831 |
 | Workspace crates | 41 | 30 | −11 |
+| Crates in `horizon-client`'s normal graph | 280 | 255 | −25 |
 | Working tree (no `.git`, no `target/`) | 139 MB | 76 MB | −63 MB |
 
 The Rust game is still 1.27M lines. **"Lite" here means fewer product surfaces and a smaller,

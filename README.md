@@ -26,7 +26,7 @@ saves.
 | Horizon Settings, cosmetics, emotes, Discord, heartbeat | On by default | Off by default |
 | Single player, LAN, all dimensions, mobs, redstone, command blocks | Yes | Yes |
 | Resource packs, data packs, OptiFine models | Yes | Yes |
-| Content mods, native Rust mods, shader packs | Yes | Buildable, off by default; see the plan |
+| Content mods, native Rust mods, shader packs | Yes | Present and unchanged in v0.1; removal is planned, see [`docs/lite/PLAN.md`](docs/lite/PLAN.md) |
 
 The game is still ~1.27M lines of Rust. **Lite means fewer surfaces and a smaller build graph, not
 a smaller Minecraft.** The full audit — what is cuttable, what is load-bearing, and why deleting
