@@ -77,6 +77,12 @@ cargo check -p horizon-client --no-default-features   # no audio, no window feat
 cargo test -p horizon-client --lib
 ```
 
+Enable the public-tree guard (rejects committed jars/assets) once per clone:
+
+```sh
+git config core.hooksPath .githooks
+```
+
 ## Repository layout
 
 | Path | What |
