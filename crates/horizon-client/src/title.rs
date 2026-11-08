@@ -1819,10 +1819,8 @@ impl Title {
                     )
                     .does(crate::widgets::Action::Exit),
                 ];
-                // CommonButtons' icon buttons; Horizon's Join a Friend (an
-                // invite code) sits behind vanilla's Friends button.
+                // CommonButtons' icon buttons. Lite has no Friends entry point.
                 for (i, (key, plain, id, icon)) in [
-                    ("gui.friends.open", "Friends", 5, "friends/friends"),
                     ("options.language", "Language...", 6, "icon/language"),
                     (
                         "options.accessibility",
@@ -3555,10 +3553,6 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
                 }
                 crate::multiplayer::Outcome::None => Action::None,
             },
-            (Mode::Main, Some(5)) => {
-                self.mode = Mode::Multiplayer(crate::multiplayer::Screen::friend(true));
-                Action::None
-            }
             (Mode::Onboarding(_), Some(onboarding::SOUNDS)) => Action::Sounds,
             (Mode::Onboarding(_), Some(onboarding::ACCESSIBILITY)) => Action::Accessibility,
             (Mode::Onboarding(_), Some(onboarding::LANGUAGE)) => Action::Language,
