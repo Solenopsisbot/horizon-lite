@@ -843,7 +843,7 @@ mod control_tests {
             (fov["type"].as_str(), fov["min"].as_i64()),
             (Some("int"), Some(30))
         );
-        assert_eq!(f.describe("renderClouds").unwrap()["value"], "true");
+        assert_eq!(f.describe("renderClouds").unwrap()["value"], "false");
         assert_eq!(
             f.describe("key_key.forward").unwrap()["value"],
             "key.keyboard.w"

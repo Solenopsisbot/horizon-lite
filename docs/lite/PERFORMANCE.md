@@ -17,9 +17,10 @@ from [`PLAN.md`](PLAN.md): that page is about product surface, this one is about
    narrator, LOD/BlueMap, shader packs, HDR and OIT are idle or off by default: each is 1–20 µs
    per frame or literally zero. They are still worth deleting for memory, build time and crash
    surface — but not for the frame rate.
-4. **The real remaining cost is chunk streaming.** Average FPS is excellent; 0.1%-low in the
-   mountain scene was **9.5 FPS** because new terrain generates, meshes and uploads in the flight
-   path. Stutter, not throughput, is what a player feels.
+4. **The real remaining cost is chunk streaming.** Average FPS is excellent even in the old
+   defaults; the 0.1%-low (the worst 1 frame in 1,000) was 126–145 FPS in clean terrain flights and
+   fell to 9.5 on one contended run, because new terrain generates, meshes and uploads in the flight
+   path. Stutter, not throughput, is what a player feels, and it is where the next work is.
 5. **Build-side wins are real and cheap:** fat LTO + one codegen unit, `target-cpu=native`, PGO
    (5–15%), and keeping mimalloc's one-second purge delay instead of purging on every free.
 
@@ -27,32 +28,36 @@ from [`PLAN.md`](PLAN.md): that page is about product surface, this one is about
 
 Protocol: [`reports/perf-measure.md`](reports/perf-measure.md). Hardware: Ryzen 7 3700X, 16
 threads, 32 GB, GeForce GTX 970 4 GB, NVIDIA 580.196.07, Vulkan, 1280×720 **offscreen**, VSync off,
-benchmark-forced unlimited frame rate, seed 1234, render distance 12 / simulation 12 (upstream
-defaults). The run was **contended**: load average 9.65 from other builds on the same machine, and
-~2 GB of the 4 GB VRAM was held by two long-lived llama-server processes. Treat the absolute
-numbers as a floor, not a hero figure.
+benchmark-forced unlimited frame rate, seed 1234.
 
-| Metric | Baseline (`fast` profile, before changes) |
+The machine is shared. Two long-lived llama-server processes hold ~2 GB of the 4 GB VRAM and
+time-slice the GPU, and other builds kept the CPU at load ~10. Identical runs moved by **2–3×**
+depending on who had the GPU at that moment, so absolute FPS here is a floor, not a benchmark
+score. The A/B below alternates A and B inside the same window and reports medians; the ratio is
+the meaningful number.
+
+Baseline, three runs of the pre-change binary with upstream defaults (RD 12, sim 12):
+
+| Metric | Mean ± stdev |
 |---|---:|
-| Startup to title | **3,208 ms** |
-| World load | **7,396 ms** |
-| Village | 1,125 avg / 203 1%-low / 76.8 0.1%-low FPS |
-| Forest | 838 / 186 / 95.7 |
-| Ocean | 930 / 168 / 68.2 |
-| Mountain | 334 / 24.9 / 9.5 |
-| Chunk load, forest / mountain | 3.0 s / 9.0 s |
-| Chunks generated, mountain | 70.6/s |
-| RSS steady / peak | 1,271 / 1,427 MB |
-| GPU allocated | 405 MB |
-| Binary | 108 MB |
+| Startup to title | 1,540 ± 120 ms (first cold start: 3,208 ms) |
+| World load | 4,619 ± 819 ms |
+| Village avg FPS | 728 ± 250 |
+| Forest avg FPS | 424 ± 280 |
+| Ocean avg FPS | 532 ± 346 |
+| Mountain avg FPS | 538 ± 357 |
+| RSS peak | 1,419 ± 28 MB |
 
-The benchmark forces VSync off and an unlimited rate, so it **cannot** show the win from removing
-the VSync/120-FPS caps; that part is measured by playing, not by this harness.
+The first start of the process pays shader/pipeline compilation (there is no persistent pipeline
+cache in this tree); later runs benefit from the driver's own cache, which is why the table above
+and the A/B show ~1.2 s to title while the very first cold start took 3.2 s.
 
 ## A/B result: the speed defaults
 
 Two `fast`-profile binaries, same machine, same driver, same prepared resources, 1280×720
-offscreen, standard 4-scene benchmark, 3 runs each, alternating A/B. A is the binary before this
+offscreen, standard 4-scene benchmark, 3 runs each, alternating A/B. A's numbers in this table are
+higher than the baseline table above because the GPU was less contended in this window; read the
+ratio, not the absolute FPS. A is the binary before this
 change (vanilla defaults: RD 12, sim 12, fancy clouds, all particles, VSync on). B is this fork
 (RD 8, sim 6, clouds off, minimal particles, solid leaves, async culling, plus the code changes
 below). Each run used a brand-new game folder with **no `options.txt`**, so each binary's own
@@ -92,10 +97,12 @@ retained pages. If memory matters more than the last few percent, set the purge 
 
 What this A/B does **not** isolate: the benchmark forces VSync off and an unlimited rate, so the
 removal of the 60/120 FPS caps is invisible here — on a real display that is an additional,
-sometimes large, win. It also does not separate the defaults from the code changes (mod-dispatch
-guard, caches, raid early-out): a code-only run with both binaries on the same frozen
-`options.txt` was not completed, because the default change accounts for nearly all of the delta.
-The mod-API guard's own estimate is 0.1–0.5% CPU; the caches are microseconds per frame.
+sometimes large, win. A code-only comparison (both binaries on the same frozen RD 12 `options.txt`)
+was attempted and is **not publishable**: every run hit `video memory is full` with the co-tenant
+VRAM pressure, and per-pair FPS ratios swung in opposite directions. The only separable code-only
+effects were memory: RSS +20% peak / +25% steady (mimalloc purge delay) and wgpu GPU bytes −7%,
+each 3/3 runs. The mod-API guard's own estimate is 0.1–0.5% CPU; the caches are microseconds per
+frame. The large, repeatable win is the defaults.
 
 Caveats: 3 runs per side, offscreen frames (no swapchain present), load average ~10 from other
 builds on the machine, 2 GB of the 4 GB VRAM held by other processes, and startup-to-title was

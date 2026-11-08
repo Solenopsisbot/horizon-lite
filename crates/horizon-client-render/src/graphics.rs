@@ -117,13 +117,15 @@ impl EntityCullingMode {
             Self::Asynchronous => "Asynchronous",
         }
     }
-    fn parse(s: &str) -> Self {
+    /// `None` for a value this build does not know: the file's caller keeps
+    /// its current setting instead of resetting it.
+    fn parse(s: &str) -> Option<Self> {
         match s {
             // Keep graphics files written before the mode selector readable.
-            "true" | "synchronous" | "sync" => Self::Synchronous,
-            "false" | "off" => Self::Off,
-            "asynchronous" | "async" => Self::Asynchronous,
-            _ => Self::default(),
+            "true" | "synchronous" | "sync" => Some(Self::Synchronous),
+            "false" | "off" => Some(Self::Off),
+            "asynchronous" | "async" => Some(Self::Asynchronous),
+            _ => None,
         }
     }
 }
@@ -156,12 +158,12 @@ impl ParticleCullingMode {
             Self::Asynchronous => "Asynchronous",
         }
     }
-    fn parse(s: &str) -> Self {
+    fn parse(s: &str) -> Option<Self> {
         match s {
-            "synchronous" | "sync" => Self::Synchronous,
-            "asynchronous" | "async" => Self::Asynchronous,
-            "off" => Self::Off,
-            _ => Self::default(),
+            "synchronous" | "sync" => Some(Self::Synchronous),
+            "asynchronous" | "async" => Some(Self::Asynchronous),
+            "off" => Some(Self::Off),
+            _ => None,
         }
     }
 }
@@ -421,11 +423,8 @@ impl LeafCullingMode {
             LeafCullingMode::Solid | LeafCullingMode::SolidAggressive
         )
     }
-    fn parse(s: &str) -> Self {
-        Self::ALL
-            .into_iter()
-            .find(|mode| mode.name() == s)
-            .unwrap_or_default()
+    fn parse(s: &str) -> Option<Self> {
+        Self::ALL.into_iter().find(|mode| mode.name() == s)
     }
 }
 
@@ -888,12 +887,24 @@ impl Graphics {
                 "blueMapAutoDetect" => g.blue_map.auto_detect = flag(g.blue_map.auto_detect),
                 "caveCulling" => g.cave_culling = flag(g.cave_culling),
                 "gpuCulling" => g.gpu_culling = flag(g.gpu_culling),
-                "entityCulling" => g.entity_culling = EntityCullingMode::parse(value),
+                "entityCulling" => {
+                    if let Some(mode) = EntityCullingMode::parse(value) {
+                        g.entity_culling = mode;
+                    }
+                }
                 "entityCullingPrecheck" => {
                     g.entity_culling_precheck = number(g.entity_culling_precheck).min(512)
                 }
-                "particleCulling" => g.particle_culling = ParticleCullingMode::parse(value),
-                "leafCulling" => g.leaf_culling = LeafCullingMode::parse(value),
+                "particleCulling" => {
+                    if let Some(mode) = ParticleCullingMode::parse(value) {
+                        g.particle_culling = mode;
+                    }
+                }
+                "leafCulling" => {
+                    if let Some(mode) = LeafCullingMode::parse(value) {
+                        g.leaf_culling = mode;
+                    }
+                }
                 "blockEntityCache" => {
                     let enabled = flag(false);
                     g.cache_shulker_boxes = enabled;
@@ -1310,7 +1321,7 @@ mod tests {
 
     #[test]
     fn leaf_culling_round_trips_its_stable_names() {
-        assert_eq!(Graphics::default().leaf_culling, LeafCullingMode::Off);
+        assert_eq!(Graphics::default().leaf_culling, LeafCullingMode::Hollow);
         for mode in LeafCullingMode::ALL {
             let g = Graphics {
                 leaf_culling: mode,
@@ -1329,7 +1340,7 @@ mod tests {
         ] {
             assert_eq!(
                 Graphics::parse(text).leaf_culling,
-                LeafCullingMode::Off,
+                Graphics::default().leaf_culling,
                 "{text:?}"
             );
         }

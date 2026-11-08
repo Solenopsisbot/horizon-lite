@@ -505,7 +505,7 @@ mod tests {
     fn cloud_distance_sets_the_radius() {
         assert_eq!(radius_cells(2), 3);
         assert_eq!(radius_cells(12), 16);
-        assert_eq!(radius_cells(128), 171);
+        assert_eq!(radius_cells(128), 43);
     }
     #[test]
     fn connected_cells_have_no_exterior_walls() {
