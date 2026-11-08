@@ -33,6 +33,8 @@ members = [
     "crates/horizon-shaders",
     "crates/horizon-optifine",
     "crates/horizon-shader-api",
+    # Packaging and theme-token tasks for a release folder.
+    "xtask",
 ]
 resolver = "2"
 
