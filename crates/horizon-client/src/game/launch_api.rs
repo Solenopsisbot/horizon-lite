@@ -1,6 +1,6 @@
-//! The game's side of the Launch API (docs/api/launch.md): the options another launcher may pass,
-//! `--launch-api`'s reply, the exit codes, and docs/api/launch-reference.md, generated from them.
-//! Update it with: `HORIZON_WRITE_DOCS=1 cargo test -p horizon-client --lib launch_api`.
+//! The game's side of the upstream Launch API: the options another launcher may pass,
+//! `--launch-api`'s reply and the exit codes. Lite has no launcher, so the generated reference
+//! page and its staleness test were dropped; the JSON reply itself is unchanged.
 
 /// The Launch API's version (docs/api/stability.md): an addition makes the next patch.
 pub const VERSION: &str = "0.1.0";
@@ -171,14 +171,17 @@ fn reply_value(horizon: &str) -> serde_json::Value {
 /// The reply as the reference shows it: the native hooks level rises with every hook added, so
 /// it shows as a placeholder and the page doesn't go stale with each one.
 #[cfg(test)]
+#[allow(dead_code)]
 fn reference_reply() -> String {
     let mut reply = reply_value("<version>");
     reply["content"]["native_mod"]["hooks"] = "<hooks level>".into();
     serde_json::to_string_pretty(&reply).expect("a JSON value")
 }
 
-/// docs/api/launch-reference.md.
+/// The reference page upstream generated for the Launch API. Lite has no launcher to promise
+/// it to, so the page and its staleness test are gone; kept for tests that compare replies.
 #[cfg(test)]
+#[allow(dead_code)]
 pub fn markdown() -> String {
     use std::fmt::Write;
     let mut out = String::new();
@@ -310,25 +313,6 @@ mod tests {
         assert_eq!(
             content["resourcepack"]["format"],
             serde_json::json!(horizon_core::version::RESOURCE_PACK_FORMAT)
-        );
-    }
-
-    /// docs/api/launch-reference.md is what `markdown` writes.
-    #[test]
-    fn launch_api_reference_is_current() {
-        let path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../..")
-            .join("docs/api/launch-reference.md");
-        let want = markdown();
-        if std::env::var_os("HORIZON_WRITE_DOCS").is_some() {
-            std::fs::write(&path, &want).unwrap();
-        }
-        let have = std::fs::read_to_string(&path)
-            .unwrap_or_default()
-            .replace("\r\n", "\n");
-        assert!(
-            have == want,
-            "docs/api/launch-reference.md is out of date: HORIZON_WRITE_DOCS=1 cargo test -p horizon-client --lib launch_api"
         );
     }
 }
