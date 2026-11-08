@@ -122,6 +122,42 @@ speed" means here.
 - **Lowering resolution scale or enabling TAA upscaling by default.** It is the biggest optional
   GPU lever (15–40%) but visibly softens the image. Left as a setting.
 
+## Feature cuts that do and do not buy FPS
+
+The audits separate two very different things that both look like "remove a feature":
+
+**Real per-frame cost when idle (worth fixing):**
+
+| Item | Cost | Status |
+|---|---|---|
+| Always-on instrumentation: GPU timer (`timestamps + resolve + copy + map_async + device.poll` every frame), `FrameGraph`/`FrameStats` pushes, `Session::frame`, debug-chart logging | 0.3–1.5% | not done; gate behind F3/benchmark |
+| Native mod API dispatch: 33 empty hooks per block event on the integrated server, ~46/frame, one per packet | 0.1–0.5%, more in redstone worlds | **done**: generated `mods.is_empty()` early-out on all 507 dispatch fns |
+| Tab-list skin path: `flush_skin_slots` + `update_remote_skins` every frame even when the list is hidden in single player | 3–10 µs/frame | not done |
+| Narrator: narration tree rebuilt per widget per screen while Narrator is **Off** (`is_active` means TTS loaded) | menus only | not done |
+| Studio recorder mutex taken on every received packet, including chunk streaming | small, hot path | not done |
+| Pads polled even with `controllers` off | 1–4 µs/loop | not done (the `horizon-ctl` virtual pad needs it) |
+
+**No steady-state cost (delete for build/memory, not FPS):** cosmetics/emotes, PvP HUD, extras
+HUD/minimap, Studio, agent control, narrator code, splitscreen, LOD/BlueMap/server terrain, shader
+packs, HDR, OIT, GPU culling, visbuffer, frame generation, FXAA/TAA/upscaling, content mods. Each is
+off or idle by default; several are already runtime-inert in this build. That is why the v0.2
+deletion list in [`PLAN.md`](PLAN.md) is not an FPS plan.
+
+## Still on the table (ranked, from the audits)
+
+| Change | Expected | Effort |
+|---|---|---|
+| PGO build (script provided) | 5–15% frames | one command |
+| `target-cpu=native` (script provided) | 2–8% | one command |
+| Gate always-on instrumentation (GPU timer, frame stats, session records) | 0.3–1.5% | low |
+| Persist a `wgpu::PipelineCache` and pass it to the ~80 pipeline creations | 0.1–0.6 s startup after the first run | ~50 LOC |
+| Move previous-log gzip off the main thread | 0–0.3 s startup | low |
+| Precompiled SPIR-V for Vulkan | 0.1–0.3 s startup | medium |
+| HUD-only boot renderer, world pipelines built on a worker during loading | 0.25–0.9 s startup | high |
+| Cache the frontier proto in `vanillagen` and track final writes during generation | large chunk-load/stutter win | medium-high |
+| Tab-list/skin/narrator/Studio gates above | small, steady | medium |
+| Encoder wire cache 32,768 → 4,096 entries | −50–150 MB RSS | low (memory, may cost streaming) |
+
 ## How to reproduce
 
 ```sh
