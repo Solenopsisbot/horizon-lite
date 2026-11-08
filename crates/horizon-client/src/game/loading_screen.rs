@@ -247,7 +247,6 @@ impl Loading {
             event_loop.exit();
             return;
         }
-        self.poll_menu_realms(event_loop);
         if let Some(w) = &self.window {
             if self.options.as_ref().is_some_and(|o| o.offscreen) {
                 self.draw();

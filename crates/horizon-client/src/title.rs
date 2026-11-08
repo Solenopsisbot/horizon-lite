@@ -336,7 +336,6 @@ pub enum Mode {
         alert: Option<Alert>,
     },
     Multiplayer(crate::multiplayer::Screen),
-    Realms(crate::realms::Screen),
     /// SafetyScreen: the warning before the first Multiplayer click, with its
     /// "Do not show this screen again" box.
     MultiplayerWarning {
@@ -446,8 +445,6 @@ pub struct Title {
     erase_check: Cell<[f32; 4]>,
     /// The folder to open next, once that backup has finished.
     open_request: Option<String>,
-    /// A Realm's checked address, once the Realms screen's join came back.
-    connect_request: Option<String>,
     /// EditWorldScreen's and WorldOpenFlows' `SystemToast` and its slide.
     toast: Option<(crate::toasts::Slide, WorldToast)>,
     icons: RefCell<std::collections::HashMap<PathBuf, (std::time::SystemTime, Option<Vec<u8>>)>>,
@@ -761,7 +758,6 @@ impl Mode {
     pub fn id(&self) -> &'static str {
         match self {
             Self::Main => "title",
-            Self::Realms(_) => "realms",
             Self::Select { .. } => "world_select",
             Self::Create { .. } => "world_create",
             Self::CreateFlat { .. } => "world_create_flat",
@@ -834,7 +830,6 @@ impl Title {
             optimize: None,
             erase_check: Cell::new([0.0; 4]),
             open_request: None,
-            connect_request: None,
             toast: None,
             icons: RefCell::new(std::collections::HashMap::new()),
             splash: choose_splash(&splashes, splash_index, (today.month(), today.day())),
@@ -1211,10 +1206,6 @@ impl Title {
             screen.wheel(delta, cursor, size);
             return false;
         }
-        if let Mode::Realms(screen) = &mut self.mode {
-            screen.wheel(delta, cursor, size);
-            return false;
-        }
         if let Mode::CreateFlat { flat, .. } = &mut self.mode {
             flat::wheel(flat, delta, cursor, size);
             return false;
@@ -1279,7 +1270,6 @@ impl Title {
     }
     /// Polling is done once per rendered frame so filesystem work never blocks drawing.
     pub fn poll_backup(&mut self) {
-        self.poll_realms();
         self.poll_onboarding(std::time::Instant::now());
         self.poll_account();
         self.poll_optimize();
@@ -1355,23 +1345,6 @@ impl Title {
         self.toast.is_some()
     }
     /// The world a finished backup made before its upgrade opens next.
-    /// The Realms screen's workers: a join that came back connects (`GetServerDetailsTask`
-    /// handing over to `ConnectScreen`).
-    fn poll_realms(&mut self) {
-        if let Mode::Realms(screen) = &mut self.mode
-            && let crate::realms::Outcome::Connect(address) = screen.poll()
-        {
-            self.connect_request = Some(address);
-        }
-    }
-    /// The server the Realms screen joins once its address came back.
-    pub fn take_connect_request(&mut self) -> Option<Action> {
-        let address = self.connect_request.take()?;
-        Some(Action::Connect {
-            address,
-            lan: false,
-        })
-    }
     pub fn take_open_request(&mut self) -> Option<String> {
         self.open_request.take()
     }
@@ -1830,16 +1803,6 @@ impl Title {
                     b(
                         cx - 100.0,
                         y + 48.0,
-                        200.0,
-                        &lang::get_or("menu.online", "Minecraft Realms"),
-                        // TitleScreen.createNormalMenuOptions: Realms is off when
-                        // multiplayer is.
-                        self.allows_multiplayer,
-                        8,
-                    ),
-                    b(
-                        cx - 100.0,
-                        y + 96.0,
                         98.0,
                         &lang::get_or("menu.options", "Options..."),
                         true,
@@ -1848,7 +1811,7 @@ impl Title {
                     .does(crate::widgets::Action::Options),
                     b(
                         cx + 2.0,
-                        y + 96.0,
+                        y + 48.0,
                         98.0,
                         &lang::get_or("menu.quit", "Quit Game"),
                         true,
@@ -2285,15 +2248,6 @@ impl Title {
                     button
                 })
                 .collect(),
-            Mode::Realms(screen) => screen
-                .buttons(w, h)
-                .into_iter()
-                .map(|(x, y, bw, label, enabled, id, icon)| {
-                    let mut btn = b(x, y, bw, &label, enabled, id);
-                    btn.icon = icon;
-                    btn
-                })
-                .collect(),
         }
     }
     /// The screen this mode is, as the narrator reads it: its id and
@@ -2483,7 +2437,6 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
                     ),
                 ),
             ),
-            Mode::Realms(_) => ScreenInfo::new("realms", lang::get("menu.online")),
             Mode::Multiplayer(_) => return None,
         };
         Some(info)
@@ -2519,8 +2472,7 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
             ),
             _ => Narratable::button(b.label.clone(), rect, b.enabled),
         };
-        // TitleScreen.init adds the icon row after Minecraft Realms and before
-        // Options... and Quit Game, which Horizon draws first.
+        // The icon row sits under the menu buttons, which Lite draws first.
         narratable.order(match b.id {
             5..=7 => 1,
             2 | 3 => 2,
@@ -3250,19 +3202,9 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
                 cursor,
                 hide_server_address,
             ),
-            Mode::Realms(screen) => screen.draw(
-                batch,
-                atlas,
-                &mut self.caret.borrow_mut(),
-                self.started,
-                cursor,
-                w,
-                h,
-            ),
         }
         for b in self.buttons(w, h) {
             crate::widgets::record(&b.label, [b.x, b.y, b.w, 20.0], b.enabled);
-            // Realms' icon buttons have no label to record.
             if b.enabled && b.label.trim().is_empty() {
                 crate::widgets::target([b.x, b.y, b.w, 20.0]);
             }
@@ -3596,24 +3538,9 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
                 Action::None
             }
             (Mode::Main, Some(8)) => {
-                // The upload screen lists the game's own worlds (`saves`).
-                self.mode =
-                    Mode::Realms(crate::realms::Screen::with_saves(Some(self.saves.clone())));
+                // Lite has no Realms: the button is gone, so nothing reaches here.
                 Action::None
             }
-            (Mode::Realms(screen), hit) => match screen.click(hit, x, y, (w, h)) {
-                crate::realms::Outcome::Back => {
-                    self.mode = Mode::Main;
-                    Action::None
-                }
-                crate::realms::Outcome::Connect(address) => Action::Connect {
-                    address,
-                    lan: false,
-                },
-                crate::realms::Outcome::OpenUri(uri) => Action::OpenUri(uri),
-                crate::realms::Outcome::Copy(text) => Action::CopyText(text),
-                crate::realms::Outcome::None => Action::None,
-            },
             (Mode::MultiplayerWarning { .. }, Some(71)) => {
                 self.mode = Mode::Main;
                 Action::None
@@ -3971,7 +3898,6 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
         }
         match &mut self.mode {
             Mode::Multiplayer(screen) => screen.focused_text(),
-            Mode::Realms(screen) => screen.focused_text(),
             mode => caret_field(mode, self.search_focused, &mut self.search),
         }
     }
@@ -4049,7 +3975,6 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
                 .filter(|(id, _)| id == focus)
                 .map(|(_, rect)| rect),
             Mode::Multiplayer(screen) => screen.focused_box((w, h)),
-            Mode::Realms(screen) => screen.focused_box((w, h)),
             Mode::CreateBuffet { buffet, .. } if buffet.query_focused => {
                 Some(buffet::search_box(w))
             }
@@ -4194,10 +4119,6 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
     }
     /// Tab navigation through widgets and fields in either forward or reverse order.
     pub fn tab_dir(&mut self, reverse: bool, size: (f32, f32)) {
-        if let Mode::Realms(screen) = &mut self.mode {
-            screen.tab();
-            return;
-        }
         if self.rules.get_mut().is_some() {
             return;
         }
@@ -4720,11 +4641,6 @@ Would you like to enable the Narrator or visit the Accessibility Settings?",
         {
             return;
         }
-        if let Mode::Realms(screen) = &mut self.mode
-            && !screen.escape()
-        {
-            return;
-        }
         match &self.mode {
             // OptimizeWorldScreen: `shouldCloseOnEsc` is false; the Backup wait takes no input.
             Mode::Backup { .. } | Mode::Optimize { .. } => {}
@@ -4821,7 +4737,6 @@ fn caret_field<'a>(
             _ => None,
         },
         Mode::Multiplayer(screen) => screen.focused_text(),
-        Mode::Realms(screen) => screen.focused_text(),
         Mode::CreateFlat { flat, .. } if flat.page == flat::Page::Presets && flat.share_focused => {
             Some((FLAT_SHARE, &mut flat.share, 1230))
         }
