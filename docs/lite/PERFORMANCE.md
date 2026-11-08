@@ -218,6 +218,17 @@ deletion list in [`PLAN.md`](PLAN.md) is not an FPS plan.
 | Tab-list/skin/narrator/Studio gates above | small, steady | medium |
 | Encoder wire cache 32,768 → 4,096 entries | −50–150 MB RSS | low (memory, may cost streaming) |
 
+## Going further than the defaults
+
+The defaults are a balance. For the maximum frame rate on this class of hardware:
+
+- Render distance **6**, simulation distance **4** (another ~44% fewer columns and ~44% fewer
+  ticked chunks than 8/6). At 720p on a 970 this is the single biggest remaining lever.
+- Resolution scale **85%**, or TAA upscaling at **Performance** (15–40% GPU-bound, visibly soft).
+- Graphics: leaf culling **Solid**, particles **Minimal**, weather **off**, clouds **off**.
+- `HORIZON_WORKER_THREADS=12` on a 16-thread CPU if the p99 is worse with the default (15).
+- A PGO build (`scripts/build-speed.sh --pgo`) trained on your own play, not just the benchmark.
+
 ## How to reproduce
 
 ```sh
